@@ -1,21 +1,25 @@
+// Copyright 2014 Hu Cong. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+//
 package downloader_test
 
 import (
-    "common/page"
-    "common/request"
-    "downloader"
+    "core/common/page"
+    "core/common/request"
+    "core/downloader"
     "fmt"
     "github.com/PuerkitoBio/goquery"
     "testing"
 )
 
 func TestDownloadHtml(t *testing.T) {
-    return
     //request := request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&callback=t13975294&id=23521&pagesize=45&dire=f&dpc=1")
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/l/v/finance/globalnews1/", "html")
 
-    var dl *downloader.Downloader
+    var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
 
     var p *page.Page
@@ -56,7 +60,7 @@ func TestDownloadJson(t *testing.T) {
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
 
-    var dl *downloader.Downloader
+    var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
 
     var p *page.Page

@@ -6,7 +6,7 @@
 package page_processer
 
 import (
-    "common/page"
+    "core/common/page"
 )
 
 type PageProcesser interface {

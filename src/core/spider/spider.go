@@ -1,16 +1,24 @@
+// Copyright 2014 Hu Cong. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// 爬虫主控程序
 package spider
 
 import (
-    "downloader"
-    "fmt"
-    "scheduler"
-    "page_processer"
-    "common/request"
-    "common/page"
-    "common/mcounter"
+    "core/common/mcounter"
+    "core/common/mlog"
+    //"core/common/page"
+    "core/common/request"
+    "core/downloader"
+    "core/page_processer"
+    "core/scheduler"
+    //"fmt"
 )
 
 type Spider struct {
+    //pStrace *mlog.Strace
+
     // 页面分析模块
     pPageProcesser page_processer.PageProcesser
 
@@ -21,17 +29,19 @@ type Spider struct {
     pScheduler scheduler.Scheduler
 
     // 并发计数器
-    mc mcounter.Mcounter
+    mc  mcounter.Mcounter
 
     // 并发个数
     threadnum int
 
     exitWhenComplete bool
 }
-    
 
 func NewSpider(pageinst page_processer.PageProcesser) *Spider {
-    ap := &Spider{pPageProcesser:pageinst}
+    ap := &Spider{pPageProcesser: pageinst}
+
+    // common
+    //ap.pStrace = mlog.NewStrace()
 
     // 初始化
     if ap.pScheduler == nil {
@@ -40,7 +50,7 @@ func NewSpider(pageinst page_processer.PageProcesser) *Spider {
         ap.SetScheduler(s)
     }
 
-    if ap.threadnum<=0 {
+    if ap.threadnum <= 0 {
         ap.threadnum = 1
     }
 
@@ -60,14 +70,14 @@ func NewSpider(pageinst page_processer.PageProcesser) *Spider {
 // 处理单个url,完成即退出
 func (this *Spider) Get(url string, respType string) {
     var urls []string
-    urls = append(urls,url)
+    urls = append(urls, url)
     this.GetAll(urls, respType)
 }
 
 // 批处理url,完成即退出
 func (this *Spider) GetAll(urls []string, respType string) {
     // push url
-    for _, u := range(urls) {
+    for _, u := range urls {
         requ := request.NewRequest(u, respType)
         this.addRequest(requ)
     }
@@ -88,51 +98,53 @@ func (this *Spider) Run() {
         this.mc.Incr()
 
         go func(*request.Request) {
-            this.pageProcess(requ)            
+            this.pageProcess(requ)
             this.mc.Decr()
         }(requ)
     }
 }
 
 // 任务模块
-func (this *Spider) SetScheduler(s scheduler.Scheduler) {
+func (this *Spider) SetScheduler(s scheduler.Scheduler) *Spider {
     this.pScheduler = s
+    return this
 }
 
-func (this *Spider) GetScheduler() (scheduler.Scheduler) {
+func (this *Spider) GetScheduler() scheduler.Scheduler {
     return this.pScheduler
 }
 
 // 下载模块
-func (this *Spider) SetDownloader(d downloader.Downloader) {
+func (this *Spider) SetDownloader(d downloader.Downloader) *Spider {
     this.pDownloader = d
+    return this
 }
 
-func (this *Spider) GetDownloader() (downloader.Downloader) {
+func (this *Spider) GetDownloader() downloader.Downloader {
     return this.pDownloader
 }
 
 // 设置处理单元的并发个数
-func (this *Spider) SetThreadnum(i int) {
+func (this *Spider) SetThreadnum(i int) *Spider {
     this.threadnum = i
+    return this
 }
 
-func (this *Spider) GetThreadnum() (int) {
+func (this *Spider) GetThreadnum() int {
     return this.threadnum
 }
 
 // 完成后是否退出程序;
 // 当任务队列存在外部插入的时候(如：redis队列)，可以设置为false;
 // 当使用QueueScheduler的时候，请设置为默认值true;
-func (this *Spider) SetExitWhenComplete(e bool) {
+func (this *Spider) SetExitWhenComplete(e bool) *Spider {
     this.exitWhenComplete = e
+    return this
 }
 
 func (this *Spider) GetExitWhenComplete() bool {
     return this.exitWhenComplete
 }
-
-
 
 func (this *Spider) addRequest(requ *request.Request) {
     this.pScheduler.Push(requ)
@@ -140,9 +152,14 @@ func (this *Spider) addRequest(requ *request.Request) {
 
 // 核心处理函数
 func (this *Spider) pageProcess(requ *request.Request) {
-    var p *page.Page
-    p = this.pDownloader.Download(requ)
-    fmt.Printf("%v\n",p)
+    mlog.Filelog.LogError("test")
+    //var p *page.Page
+    //p = this.pDownloader.Download(requ)
+    this.pDownloader.Download(requ)
+    //fmt.Printf("%v\n", p)
 
     // todo 下载重试
+
+    //this.pPageProcesser.Process(p)
+    // todo
 }

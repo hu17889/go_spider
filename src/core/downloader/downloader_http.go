@@ -1,9 +1,14 @@
+// Copyright 2014 Hu Cong. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+//
 package downloader
 
 import (
-    "common/mlog"
-    "common/page"
-    "common/request"
+    "core/common/mlog"
+    "core/common/page"
+    "core/common/request"
     "encoding/json"
     "github.com/PuerkitoBio/goquery"
     "io/ioutil"
@@ -52,11 +57,10 @@ func (this *HttpDownloader) downloadHtml(req *request.Request) *page.Page {
     body, _ = doc.Html()
 
     // create Page
-    var p *page.Page
-    p = page.NewPage()
-    p.SetRequest(req)
-    p.SetBodyStr(body)
-    p.SetHtmlParser(doc) // doc parser
+    var p *page.Page = page.NewPage().
+        SetRequest(req).
+        SetBodyStr(body).
+        SetHtmlParser(doc)
 
     return p
 
@@ -87,10 +91,11 @@ func (this *HttpDownloader) downloadJson(req *request.Request) *page.Page {
     }
 
     // create Page
-    var p *page.Page
-    p = page.NewPage()
-    p.SetRequest(req)
-    p.SetBodyStr(string(body))
-    p.SetJsonMap(r) // json result
+    // json result
+    var p *page.Page = page.NewPage().
+        SetRequest(req).
+        SetBodyStr(string(body)).
+        SetJsonMap(r)
+
     return p
 }
