@@ -45,7 +45,6 @@ func (this *Config) Clear() {
 }
 
 func (this *Config) LoadString(s string) error {
-    println(s)
     lines := strings.Split(s, "\n")
     section := ""
     // @todo: 两遍遍历，第一遍检查语法是否正确，第二遍执行更改

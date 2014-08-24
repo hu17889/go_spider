@@ -1,14 +1,10 @@
-// Copyright 2014 Hu Cong. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 // Package page contain result catched by download.
 // And it alse has result parsed by PageProcesser.
 package page
 
 import (
+    "core/common/page_items"
     "core/common/request"
-    //"core/common/page_items"
     "github.com/PuerkitoBio/goquery"
 )
 
@@ -23,7 +19,7 @@ type Page struct {
     jsonMap interface{}
 
     // items to save in pipeline
-    // pItems *page_items.PageItems
+    pItems *page_items.PageItems
 
     // html 字符串
     body string
@@ -32,8 +28,19 @@ type Page struct {
     targetRequests []*request.Request
 }
 
-func NewPage() *Page {
-    return &Page{}
+func NewPage(req *request.Request) *Page {
+    return &Page{pItems: page_items.NewPageItems(req), req: req}
+}
+
+// save KV pair to PageItems preparing for Pipeline
+func (this *Page) AddField(name string, value string) {
+    println(name, value)
+    //this.pItems.AddItem(name, value)
+}
+
+// PageItems will not be saved in Pipeline wher skip is set true
+func (this *Page) SetSkip(skip bool) {
+    this.pItems.SetSkip(skip)
 }
 
 // request struct
@@ -46,15 +53,22 @@ func (this *Page) GetRequest() *request.Request {
     return this.req
 }
 
-// 加入新的待爬取Request
-// 爬取的Request的返回类型和当前Request相同
-func (this *Page) AddTargetRequest(s string) *Page {
-    this.targetRequests = append(this.targetRequests, request.NewRequest(s, this.req.GetResponceType()))
+// Add new Request waitting for craw
+func (this *Page) AddTargetRequest(url string, respType string) *Page {
+    this.targetRequests = append(this.targetRequests, request.NewRequest(url, respType))
+    return this
+}
+
+// Add new Requests waitting for craw
+func (this *Page) AddTargetRequests(urls []string, respType string) *Page {
+    for _, url := range urls {
+        this.AddTargetRequest(url, respType)
+    }
     return this
 }
 
 // 获取目标Request，会在Spider中调用并将目标Request插入Scheduler
-func (this *Page) getTargetRequests() []*request.Request {
+func (this *Page) GetTargetRequests() []*request.Request {
     return this.targetRequests
 }
 

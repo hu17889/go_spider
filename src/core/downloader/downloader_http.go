@@ -1,7 +1,3 @@
-// Copyright 2014 Hu Cong. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 //
 package downloader
 
@@ -31,7 +27,7 @@ func (this *HttpDownloader) Download(req *request.Request) *page.Page {
     case "json":
         return this.downloadJson(req)
     default:
-        mlog.Log("error request type:" + mtype)
+        mlog.Filelog.LogError("error request type:" + mtype)
         return nil
     }
 }
@@ -39,26 +35,31 @@ func (this *HttpDownloader) Download(req *request.Request) *page.Page {
 func (this *HttpDownloader) downloadHtml(req *request.Request) *page.Page {
     var err error
     var url string
-    url = req.GetUrl()
+    if url = req.GetUrl(); len(url) == 0 {
+        return nil
+    }
 
     var resp *http.Response
-    resp, err = http.Get(url)
-    if err != nil {
-        mlog.Log(err)
+    if resp, err = http.Get(url); err != nil {
+        mlog.Filelog.LogError(err.Error())
+        return nil
     }
     defer resp.Body.Close()
 
     var doc *goquery.Document
     if doc, err = goquery.NewDocumentFromReader(resp.Body); err != nil {
-        mlog.Log(err)
+        mlog.Filelog.LogError(err.Error())
+        return nil
     }
 
     var body string
-    body, _ = doc.Html()
+    if body, err = doc.Html(); err != nil {
+        mlog.Filelog.LogError(err.Error())
+        return nil
+    }
 
     // create Page
-    var p *page.Page = page.NewPage().
-        SetRequest(req).
+    var p *page.Page = page.NewPage(req).
         SetBodyStr(body).
         SetHtmlParser(doc)
 
@@ -69,31 +70,33 @@ func (this *HttpDownloader) downloadHtml(req *request.Request) *page.Page {
 func (this *HttpDownloader) downloadJson(req *request.Request) *page.Page {
     var err error
     var url string
-    url = req.GetUrl()
+    if url = req.GetUrl(); len(url) == 0 {
+        mlog.Filelog.LogError(err.Error())
+        return nil
+    }
 
     var resp *http.Response
-    resp, err = http.Get(url)
-    if err != nil {
-        mlog.Log(err)
+    if resp, err = http.Get(url); err != nil {
+        mlog.Filelog.LogError(err.Error())
+        return nil
     }
     defer resp.Body.Close()
 
     var body []byte
-    body, err = ioutil.ReadAll(resp.Body)
-    if err != nil {
-        mlog.Log(err)
+    if body, err = ioutil.ReadAll(resp.Body); err != nil {
+        mlog.Filelog.LogError(err.Error())
+        return nil
     }
 
     var r interface{}
-    err = json.Unmarshal(body, &r)
-    if err != nil {
-        mlog.Log(err)
+    if err = json.Unmarshal(body, &r); err != nil {
+        mlog.Filelog.LogError(err.Error())
+        return nil
     }
 
     // create Page
     // json result
-    var p *page.Page = page.NewPage().
-        SetRequest(req).
+    var p *page.Page = page.NewPage(req).
         SetBodyStr(string(body)).
         SetJsonMap(r)
 

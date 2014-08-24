@@ -1,7 +1,3 @@
-// Copyright 2014 Hu Cong. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 //
 package page_items
 
@@ -12,21 +8,33 @@ import (
 type PageItems struct {
     req *request.Request
 
-    items map[string]interface{}
+    items map[string]string
+
+    // Whether send ResultItems to scheduler or not.
+    skip bool
 }
 
 func NewPageItems(r *request.Request) *PageItems {
     return &PageItems{req: r}
 }
 
-func (this *PageItems) AddItem(key string, item interface{}) {
+func (this *PageItems) AddItem(key string, item string) {
     this.items[key] = item
 }
 
-func (this *PageItems) GetItem(key string) interface{} {
-    return items[key]
+func (this *PageItems) GetItem(key string) string {
+    return this.items[key]
 }
 
-func (this *PageItems) GetAll() map[string]interface{} {
-    return items
+func (this *PageItems) GetAll() map[string]string {
+    return this.items
+}
+
+func (this *PageItems) SetSkip(skip bool) *PageItems {
+    this.skip = skip
+    return this
+}
+
+func (this *PageItems) Skip() bool {
+    return this.skip
 }

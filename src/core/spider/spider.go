@@ -1,19 +1,17 @@
-// Copyright 2014 Hu Cong. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-// 爬虫主控程序
+// craw master module
 package spider
 
 import (
     "core/common/mcounter"
     "core/common/mlog"
-    //"core/common/page"
+    "core/common/page"
     "core/common/request"
     "core/downloader"
     "core/page_processer"
     "core/scheduler"
-    //"fmt"
+    "fmt"
+    //"time"
+    //"math/rand"
 )
 
 type Spider struct {
@@ -40,9 +38,6 @@ type Spider struct {
 func NewSpider(pageinst page_processer.PageProcesser) *Spider {
     ap := &Spider{pPageProcesser: pageinst}
 
-    // common
-    //ap.pStrace = mlog.NewStrace()
-
     // 初始化
     if ap.pScheduler == nil {
         var s scheduler.Scheduler
@@ -50,17 +45,11 @@ func NewSpider(pageinst page_processer.PageProcesser) *Spider {
         ap.SetScheduler(s)
     }
 
-    if ap.threadnum <= 0 {
-        ap.threadnum = 1
-    }
-
     if ap.pDownloader == nil {
         var d downloader.Downloader
         d = downloader.NewHttpDownloader()
         ap.SetDownloader(d)
     }
-
-    ap.mc = mcounter.NewStaticMcounter(ap.threadnum)
 
     ap.exitWhenComplete = true
 
@@ -86,10 +75,16 @@ func (this *Spider) GetAll(urls []string, respType string) {
 }
 
 func (this *Spider) Run() {
+    if this.threadnum <= 0 {
+        this.threadnum = 1
+    }
+    this.mc = mcounter.NewStaticMcounter(this.threadnum)
+
     for {
         var requ *request.Request
         requ = this.pScheduler.Poll()
 
+        // mc is not atomic
         if this.mc.Count() == 0 && requ == nil && this.exitWhenComplete {
             break
         } else if requ == nil {
@@ -97,9 +92,17 @@ func (this *Spider) Run() {
         }
         this.mc.Incr()
 
+        // Asynchronous fetching
         go func(*request.Request) {
+            defer func() {
+                if r := recover(); r != nil {
+                    errStr := fmt.Sprintf("%v", r)
+                    mlog.Filelog.LogError("down error " + errStr)
+                }
+            }()
+            defer this.mc.Decr()
+            //time.Sleep( time.Duration(rand.Intn(5)) * time.Second)
             this.pageProcess(requ)
-            this.mc.Decr()
         }(requ)
     }
 }
@@ -146,20 +149,49 @@ func (this *Spider) GetExitWhenComplete() bool {
     return this.exitWhenComplete
 }
 
-func (this *Spider) addRequest(requ *request.Request) {
-    this.pScheduler.Push(requ)
+func (this *Spider) AddUrl(url string, respType string) *Spider {
+    req := request.NewRequest(url, respType)
+    this.addRequest(req)
+    return this
 }
 
-// 核心处理函数
-func (this *Spider) pageProcess(requ *request.Request) {
-    mlog.Filelog.LogError("test")
-    //var p *page.Page
-    //p = this.pDownloader.Download(requ)
-    this.pDownloader.Download(requ)
+func (this *Spider) AddUrls(urls []string, respType string) *Spider {
+    for _, url := range urls {
+        req := request.NewRequest(url, respType)
+        this.addRequest(req)
+    }
+    return this
+}
+
+// add Request to Schedule
+func (this *Spider) addRequest(req *request.Request) {
+    if req == nil {
+        mlog.Filelog.LogError("request is nil")
+        return
+    } else if req.GetUrl() == "" {
+        mlog.Filelog.LogError("request is empty")
+        return
+    }
+    this.pScheduler.Push(req)
+}
+
+// core processer
+func (this *Spider) pageProcess(req *request.Request) {
+    //mlog.Filelog.LogError("test")
+    var p *page.Page
+    p = this.pDownloader.Download(req)
+    if p == nil {
+        return
+    }
+    //this.pDownloader.Download(req)
     //fmt.Printf("%v\n", p)
 
     // todo 下载重试
 
-    //this.pPageProcesser.Process(p)
-    // todo
+    this.pPageProcesser.Process(p)
+    for _, req := range p.GetTargetRequests() {
+        this.addRequest(req)
+    }
+    // todo pipeline
+
 }

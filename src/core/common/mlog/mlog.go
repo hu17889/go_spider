@@ -1,7 +1,3 @@
-// Copyright 2014 Hu Cong. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 // 日志类
 package mlog
 
@@ -9,8 +5,8 @@ import (
     "core/common/etc_config"
     "log"
     "os"
-    "time"
     "strconv"
+    "time"
 )
 
 func Log(v ...interface{}) {
@@ -45,8 +41,6 @@ func (this *strace) Close() {
     this.isopen = false
 }
 
-
-
 // 文件日志
 type filelog struct {
     loginst *log.Logger
@@ -60,7 +54,7 @@ var Filelog *filelog = newFilelog()
 func newFilelog() *filelog {
     logconf := etc_config.Config.SectionContent("log")
     var isopen bool = false
-    if value, ok := logconf["isopen"]; ok && value=="true" {
+    if value, ok := logconf["isopen"]; ok && value == "true" {
         isopen = true
     }
 
@@ -73,9 +67,9 @@ func newFilelog() *filelog {
     }
 
     year, month, day := time.Now().Date()
-    filename := "log." + strconv.Itoa(year) + "-" + strconv.Itoa(int(month)) + "-" + strconv.Itoa(day) 
+    filename := "log." + strconv.Itoa(year) + "-" + strconv.Itoa(int(month)) + "-" + strconv.Itoa(day)
     err := os.MkdirAll(logpath, 0755)
-    if err !=nil {
+    if err != nil {
         panic("logpath error : " + logpath + "\n")
     }
 
