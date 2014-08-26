@@ -2,6 +2,7 @@
 package spider
 
 import (
+    "core/common/etc_config"
     "core/common/mcounter"
     "core/common/mlog"
     "core/common/page"
@@ -35,7 +36,13 @@ type Spider struct {
     exitWhenComplete bool
 }
 
-func NewSpider(pageinst page_processer.PageProcesser) *Spider {
+// Spider is scheduler module for all the other modules, like downloader, pipeline, scheduler and etc.
+// The pageinst is the PageProcesser instance. And confpath could be empty string, so config will use
+// default path "WD/etc/main.conf"
+func NewSpider(pageinst page_processer.PageProcesser, confpath string) *Spider {
+    // init config
+    etc_config.StartConf(confpath)
+
     ap := &Spider{pPageProcesser: pageinst}
 
     // 初始化
@@ -97,7 +104,7 @@ func (this *Spider) Run() {
             defer func() {
                 if r := recover(); r != nil {
                     errStr := fmt.Sprintf("%v", r)
-                    mlog.Filelog.LogError("down error " + errStr)
+                    mlog.LogInst().LogError("down error " + errStr)
                 }
             }()
             defer this.mc.Decr()
@@ -166,10 +173,10 @@ func (this *Spider) AddUrls(urls []string, respType string) *Spider {
 // add Request to Schedule
 func (this *Spider) addRequest(req *request.Request) {
     if req == nil {
-        mlog.Filelog.LogError("request is nil")
+        mlog.LogInst().LogError("request is nil")
         return
     } else if req.GetUrl() == "" {
-        mlog.Filelog.LogError("request is empty")
+        mlog.LogInst().LogError("request is empty")
         return
     }
     this.pScheduler.Push(req)
@@ -177,7 +184,7 @@ func (this *Spider) addRequest(req *request.Request) {
 
 // core processer
 func (this *Spider) pageProcess(req *request.Request) {
-    //mlog.Filelog.LogError("test")
+    mlog.LogInst().LogError("test")
     var p *page.Page
     p = this.pDownloader.Download(req)
     if p == nil {

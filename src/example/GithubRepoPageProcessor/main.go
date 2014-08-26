@@ -1,6 +1,14 @@
 //
 package main
 
+/*
+The packages must be imported:
+    "core/common/page"
+    "core/page_processer"
+    "core/spider"
+The packages may be imported:
+    "github.com/PuerkitoBio/goquery": html dom parser.
+*/
 import (
     "core/common/page"
     "core/page_processer"
@@ -17,8 +25,8 @@ func NewMyPageProcesser() *MyPageProcesser {
     return &MyPageProcesser{}
 }
 
-// we parse html dom here and get the content that we want.
-// we use goquery (http://godoc.org/github.com/PuerkitoBio/goquery#Selection.Html) to parse html.
+// Parse html dom here and get the content that we want.
+// Package goquery (http://godoc.org/github.com/PuerkitoBio/goquery#Selection.Html) is used to parse html.
 func (this *MyPageProcesser) Process(p *page.Page) {
     query := p.GetHtmlParser()
     var urls []string
@@ -27,7 +35,7 @@ func (this *MyPageProcesser) Process(p *page.Page) {
         urls = append(urls, "http://github.com/"+href)
         fmt.Printf("%v\n", urls)
     })
-    // these urls will be saved and crawed by other Coroutines
+    // these urls will be saved and crawed by other coroutines.
     p.AddTargetRequests(urls, "html")
 
     name := query.Find(".entry-title .author").Text()
@@ -44,7 +52,7 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     var pagepro page_processer.PageProcesser
     pagepro = NewMyPageProcesser()
-    spider.NewSpider(pagepro).
+    spider.NewSpider(pagepro, "").
         AddUrl("https://github.com/hu17889?tab=repositories", "html"). // start url
         SetThreadnum(3).                                               // craw reques in three Coroutines
         Run()

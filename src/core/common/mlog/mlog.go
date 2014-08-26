@@ -48,11 +48,19 @@ type filelog struct {
     isopen bool
 }
 
-var Filelog *filelog = newFilelog()
+var Filelog *filelog
+
+// Get Log instance
+func LogInst() *filelog {
+    if Filelog == nil {
+        Filelog = newFilelog()
+    }
+    return Filelog
+}
 
 // 默认日志路径为WORKDIR/log/log.2011-01-01
 func newFilelog() *filelog {
-    logconf := etc_config.Config.SectionContent("log")
+    logconf := etc_config.Conf().SectionContent("log")
     var isopen bool = false
     if value, ok := logconf["isopen"]; ok && value == "true" {
         isopen = true

@@ -26,7 +26,7 @@ func main() {
     var pagepro page_processer.PageProcesser
     pagepro = NewMyPageProcesser()
     //var sp *spider.Spider
-    spider.NewSpider(pagepro).Get("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
+    spider.NewSpider(pagepro, "").Get("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
 
     //sp.Get("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
 
