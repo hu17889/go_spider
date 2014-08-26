@@ -2,8 +2,8 @@ package etc_config
 
 import (
     "core/common/config"
-    "os"
     "core/common/util"
+    "os"
 )
 
 // Get default config path "WD/etc/main.conf"
@@ -18,14 +18,13 @@ func configpath() string {
     return logpath + filename
 }
 
-var Config *config.Config;
+var Config *config.Config
 var path string
-
 
 // Used in Spider for initialization at first time.
 func StartConf(configFilePath string) *config.Config {
-    if configFilePath!="" && !util.IsFileExists(configFilePath) {
-        panic("config path is not valiad:"+configFilePath)
+    if configFilePath != "" && !util.IsFileExists(configFilePath) {
+        panic("config path is not valiad:" + configFilePath)
     }
 
     path = configFilePath
@@ -42,4 +41,3 @@ func Conf() *config.Config {
     }
     return Config
 }
-
