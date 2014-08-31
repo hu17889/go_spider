@@ -3,12 +3,13 @@ package spider
 
 import (
     "core/common/etc_config"
-    "core/common/mcounter"
     "core/common/mlog"
-    "core/common/page"
+    "core/common/page_items"
     "core/common/request"
+    "core/common/resource_manage"
     "core/downloader"
     "core/page_processer"
+    "core/pipeline"
     "core/scheduler"
     "fmt"
     //"time"
@@ -16,105 +17,134 @@ import (
 )
 
 type Spider struct {
-    //pStrace *mlog.Strace
+    debug    bool // make panic effective
+    taskname string
 
-    // 页面分析模块
     pPageProcesser page_processer.PageProcesser
 
-    // 下载模块
     pDownloader downloader.Downloader
 
-    // 任务模块
     pScheduler scheduler.Scheduler
 
-    // 并发计数器
-    mc  mcounter.Mcounter
+    pPiplelines []pipeline.Pipeline
 
-    // 并发个数
+    mc  resource_manage.ResourceManage
+
     threadnum int
 
     exitWhenComplete bool
 }
 
 // Spider is scheduler module for all the other modules, like downloader, pipeline, scheduler and etc.
-// The pageinst is the PageProcesser instance. And confpath could be empty string, so config will use
-// default path "WD/etc/main.conf"
-func NewSpider(pageinst page_processer.PageProcesser, confpath string) *Spider {
+// The confpath could be empty string, then config will use default path "WD/etc/main.conf"
+// The taskname could be empty string too, or it can be used in Pipeline for record the result crawled by which task;
+func NewSpider(pageinst page_processer.PageProcesser, confpath string, taskname string) *Spider {
     // init config
     etc_config.StartConf(confpath)
 
-    ap := &Spider{pPageProcesser: pageinst}
+    ap := &Spider{taskname: taskname, pPageProcesser: pageinst}
 
-    // 初始化
+    ap.debug = false
+    ap.exitWhenComplete = true
+
+    // init spider
     if ap.pScheduler == nil {
-        var s scheduler.Scheduler
-        s = scheduler.NewQueueScheduler()
-        ap.SetScheduler(s)
+        ap.SetScheduler(scheduler.NewQueueScheduler())
     }
 
     if ap.pDownloader == nil {
-        var d downloader.Downloader
-        d = downloader.NewHttpDownloader()
-        ap.SetDownloader(d)
+        ap.SetDownloader(downloader.NewHttpDownloader())
     }
 
-    ap.exitWhenComplete = true
+    ap.pPiplelines = make([]pipeline.Pipeline, 0)
 
     return ap
 }
 
-// 处理单个url,完成即退出
-func (this *Spider) Get(url string, respType string) {
-    var urls []string
-    urls = append(urls, url)
-    this.GetAll(urls, respType)
+func (this *Spider) SetDebug(debug bool) *Spider {
+    this.debug = debug
+    return this
 }
 
-// 批处理url,完成即退出
-func (this *Spider) GetAll(urls []string, respType string) {
+func (this *Spider) Taskname() string {
+    return this.taskname
+}
+
+// Deal with one url and return the PageItems
+func (this *Spider) Get(url string, respType string) *page_items.PageItems {
+    var urls []string
+    urls = append(urls, url)
+    items := this.GetAll(urls, respType)
+    if len(items) != 0 {
+        return items[0]
+    }
+    return nil
+}
+
+// Deal with several urls and return the PageItems slice
+func (this *Spider) GetAll(urls []string, respType string) []*page_items.PageItems {
     // push url
     for _, u := range urls {
-        requ := request.NewRequest(u, respType)
-        this.addRequest(requ)
+        req := request.NewRequest(u, respType)
+        this.addRequest(req)
     }
 
+    pip := pipeline.NewCollectPipelinePageItems()
+    this.AddPipeline(pip)
+
     this.Run()
+
+    return pip.GetCollected()
 }
 
 func (this *Spider) Run() {
     if this.threadnum <= 0 {
         this.threadnum = 1
     }
-    this.mc = mcounter.NewStaticMcounter(this.threadnum)
+    this.mc = resource_manage.NewResourceManageChan(this.threadnum)
 
     for {
-        var requ *request.Request
-        requ = this.pScheduler.Poll()
+        req := this.pScheduler.Poll()
 
         // mc is not atomic
-        if this.mc.Count() == 0 && requ == nil && this.exitWhenComplete {
+        if this.mc.Has() == 0 && req == nil && this.exitWhenComplete {
             break
-        } else if requ == nil {
+        } else if req == nil {
             continue
         }
-        this.mc.Incr()
+        this.mc.GetOne()
 
         // Asynchronous fetching
         go func(*request.Request) {
-            defer func() {
-                if r := recover(); r != nil {
-                    errStr := fmt.Sprintf("%v", r)
-                    mlog.LogInst().LogError("down error " + errStr)
-                }
-            }()
-            defer this.mc.Decr()
+            if !this.debug {
+                defer func() {
+                    if r := recover(); r != nil {
+                        errStr := fmt.Sprintf("%v", r)
+                        mlog.LogInst().LogError("down error: " + errStr)
+                    }
+                }()
+            }
+            defer this.mc.FreeOne()
             //time.Sleep( time.Duration(rand.Intn(5)) * time.Second)
-            this.pageProcess(requ)
-        }(requ)
+            this.pageProcess(req)
+        }(req)
     }
+    this.close()
 }
 
-// 任务模块
+func (this *Spider) close() {
+    this.debug = false
+    this.SetScheduler(scheduler.NewQueueScheduler())
+    this.SetDownloader(downloader.NewHttpDownloader())
+    this.pPiplelines = make([]pipeline.Pipeline, 0)
+    this.exitWhenComplete = true
+}
+
+func (this *Spider) AddPipeline(p pipeline.Pipeline) *Spider {
+    this.pPiplelines = append(this.pPiplelines, p)
+    return this
+}
+
 func (this *Spider) SetScheduler(s scheduler.Scheduler) *Spider {
     this.pScheduler = s
     return this
@@ -124,7 +154,6 @@ func (this *Spider) GetScheduler() scheduler.Scheduler {
     return this.pScheduler
 }
 
-// 下载模块
 func (this *Spider) SetDownloader(d downloader.Downloader) *Spider {
     this.pDownloader = d
     return this
@@ -134,7 +163,6 @@ func (this *Spider) GetDownloader() downloader.Downloader {
     return this.pDownloader
 }
 
-// 设置处理单元的并发个数
 func (this *Spider) SetThreadnum(i int) *Spider {
     this.threadnum = i
     return this
@@ -144,9 +172,8 @@ func (this *Spider) GetThreadnum() int {
     return this.threadnum
 }
 
-// 完成后是否退出程序;
-// 当任务队列存在外部插入的时候(如：redis队列)，可以设置为false;
-// 当使用QueueScheduler的时候，请设置为默认值true;
+// If exit when each crawl task is done.
+// If you want to keep spider in memory all the time and add url from outside, you can set it true.
 func (this *Spider) SetExitWhenComplete(e bool) *Spider {
     this.exitWhenComplete = e
     return this
@@ -184,21 +211,23 @@ func (this *Spider) addRequest(req *request.Request) {
 
 // core processer
 func (this *Spider) pageProcess(req *request.Request) {
-    mlog.LogInst().LogError("test")
-    var p *page.Page
-    p = this.pDownloader.Download(req)
+    p := this.pDownloader.Download(req)
     if p == nil {
         return
     }
-    //this.pDownloader.Download(req)
-    //fmt.Printf("%v\n", p)
 
-    // todo 下载重试
+    // TODO: download retry
 
     this.pPageProcesser.Process(p)
     for _, req := range p.GetTargetRequests() {
         this.addRequest(req)
     }
-    // todo pipeline
+
+    // output
+    if !p.GetSkip() {
+        for _, pip := range this.pPiplelines {
+            pip.Process(p.GetPageItems(), this)
+        }
+    }
 
 }

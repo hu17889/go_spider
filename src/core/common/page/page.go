@@ -34,13 +34,20 @@ func NewPage(req *request.Request) *Page {
 
 // save KV pair to PageItems preparing for Pipeline
 func (this *Page) AddField(name string, value string) {
-    println(name, value)
-    //this.pItems.AddItem(name, value)
+    this.pItems.AddItem(name, value)
+}
+
+func (this *Page) GetPageItems() *page_items.PageItems {
+    return this.pItems
 }
 
 // PageItems will not be saved in Pipeline wher skip is set true
 func (this *Page) SetSkip(skip bool) {
     this.pItems.SetSkip(skip)
+}
+
+func (this *Page) GetSkip() bool {
+    return this.pItems.GetSkip()
 }
 
 // request struct

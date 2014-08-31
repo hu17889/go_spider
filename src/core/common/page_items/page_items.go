@@ -14,8 +14,13 @@ type PageItems struct {
     skip bool
 }
 
-func NewPageItems(r *request.Request) *PageItems {
-    return &PageItems{req: r}
+func NewPageItems(req *request.Request) *PageItems {
+    items := make(map[string]string)
+    return &PageItems{req: req, items: items}
+}
+
+func (this *PageItems) GetRequest() *request.Request {
+    return this.req
 }
 
 func (this *PageItems) AddItem(key string, item string) {
@@ -35,6 +40,6 @@ func (this *PageItems) SetSkip(skip bool) *PageItems {
     return this
 }
 
-func (this *PageItems) Skip() bool {
+func (this *PageItems) GetSkip() bool {
     return this.skip
 }

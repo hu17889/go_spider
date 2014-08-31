@@ -5,12 +5,21 @@ import (
     "core/common/etc_config"
     "log"
     "os"
+    "runtime"
     "strconv"
     "time"
 )
 
-func Log(v ...interface{}) {
-    log.Panicln(v)
+type plog struct {
+}
+
+func (*plog) getCaller() (string, int) {
+    _, file, line, ok := runtime.Caller(3)
+    if !ok {
+        file = "???"
+        line = 0
+    }
+    return file, line
 }
 
 // 向标准错误输出输出执行过程
@@ -43,6 +52,8 @@ func (this *strace) Close() {
 
 // 文件日志
 type filelog struct {
+    plog
+
     loginst *log.Logger
 
     isopen bool
@@ -86,14 +97,15 @@ func newFilelog() *filelog {
         panic("log file open error : " + logpath + filename + "\n")
     }
 
-    return &filelog{loginst: log.New(f, "", log.Llongfile|log.LstdFlags), isopen: isopen}
+    return &filelog{loginst: log.New(f, "", log.LstdFlags), isopen: isopen}
 }
 
 func (this *filelog) log(lable string, str string) {
     if !this.isopen {
         return
     }
-    this.loginst.Println(lable + " " + str)
+    file, line := this.getCaller()
+    this.loginst.Printf("%s:%d: %s %s\n", file, line, lable, str)
 }
 
 func (this *filelog) LogError(str string) {
