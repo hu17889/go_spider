@@ -1,12 +1,14 @@
-//
+// Package request implements request entity contains url and other relevant informaion.
 package request
+
 
 type Request struct {
     url      string
     respType string
 }
 
-// respType is "json" or "thml"
+// NewRequest returns initialized Request object.
+// The respType is "json" or "html"
 func NewRequest(url string, respType string) *Request {
     return &Request{url, respType}
 }

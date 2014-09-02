@@ -1,3 +1,4 @@
+// Package etc_config implements config initialization of one spider.
 package etc_config
 
 import (
@@ -6,7 +7,7 @@ import (
     "os"
 )
 
-// Get default config path "WD/etc/main.conf"
+// Configpath gets default config path like "WD/etc/main.conf".
 func configpath() string {
     wd, _ := os.Getwd()
     logpath := wd + "/etc/"
@@ -18,10 +19,11 @@ func configpath() string {
     return logpath + filename
 }
 
-var Config *config.Config
+// Config is a config singleton object for one spider.
+var conf *config.Config
 var path string
 
-// Used in Spider for initialization at first time.
+// StartConf is used in Spider for initialization at first time.
 func StartConf(configFilePath string) *config.Config {
     if configFilePath != "" && !util.IsFileExists(configFilePath) {
         panic("config path is not valiad:" + configFilePath)
@@ -31,13 +33,13 @@ func StartConf(configFilePath string) *config.Config {
     return Conf()
 }
 
-// Get config instance
+// Conf gets singleton instance of Config.
 func Conf() *config.Config {
-    if Config == nil {
+    if conf == nil {
         if path == "" {
             path = configpath()
         }
-        Config = config.NewConfig().Load(path)
+        conf = config.NewConfig().Load(path)
     }
-    return Config
+    return conf
 }

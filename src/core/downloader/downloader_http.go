@@ -27,7 +27,7 @@ func (this *HttpDownloader) Download(req *request.Request) *page.Page {
     case "json":
         return this.downloadJson(req)
     default:
-        mlog.Filelog.LogError("error request type:" + mtype)
+        mlog.LogInst().LogError("error request type:" + mtype)
         return nil
     }
 }
@@ -41,20 +41,20 @@ func (this *HttpDownloader) downloadHtml(req *request.Request) *page.Page {
 
     var resp *http.Response
     if resp, err = http.Get(url); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
     defer resp.Body.Close()
 
     var doc *goquery.Document
     if doc, err = goquery.NewDocumentFromReader(resp.Body); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
 
     var body string
     if body, err = doc.Html(); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
 
@@ -71,26 +71,26 @@ func (this *HttpDownloader) downloadJson(req *request.Request) *page.Page {
     var err error
     var url string
     if url = req.GetUrl(); len(url) == 0 {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
 
     var resp *http.Response
     if resp, err = http.Get(url); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
     defer resp.Body.Close()
 
     var body []byte
     if body, err = ioutil.ReadAll(resp.Body); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
 
     var r interface{}
     if err = json.Unmarshal(body, &r); err != nil {
-        mlog.Filelog.LogError(err.Error())
+        mlog.LogInst().LogError(err.Error())
         return nil
     }
 

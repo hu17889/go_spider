@@ -1,3 +1,4 @@
+// Package config provides for parse config file.
 package config
 
 import (
@@ -8,7 +9,6 @@ import (
     "time"
 )
 
-// 注意，针对 Config 的各种操作，如果需要并发，需要在外层进行同步
 type Config struct {
     globalContent   map[string]string
     sectionContents map[string]map[string]string
@@ -22,7 +22,7 @@ func NewConfig() *Config {
     }
 }
 
-// 从配置文件加载配置内容
+// Load reads config file and returns an initialized Config.
 func (this *Config) Load(configFile string) *Config {
     stream, err := ioutil.ReadFile(configFile)
     if err != nil {
@@ -32,9 +32,8 @@ func (this *Config) Load(configFile string) *Config {
     return this
 }
 
-// 把配置内容写入某配置文件
+// Save writes config content to a config file.
 func (this *Config) Save(configFile string) error {
-    // @todo: 如果外层加锁，本调用可能会阻塞外层一段时间。考虑用异步
     return ioutil.WriteFile(configFile, []byte(this.String()), 0777)
 }
 
@@ -47,7 +46,6 @@ func (this *Config) Clear() {
 func (this *Config) LoadString(s string) error {
     lines := strings.Split(s, "\n")
     section := ""
-    // @todo: 两遍遍历，第一遍检查语法是否正确，第二遍执行更改
     for _, line := range lines {
         line = strings.Trim(line, emptyRunes)
         if line == "" || line[0] == '#' {
