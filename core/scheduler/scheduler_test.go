@@ -6,8 +6,8 @@
 package scheduler_test
 
 import (
-    "core/common/request"
-    "core/scheduler"
+    "github.com/hu17889/core/common/request"
+    "github.com/hu17889/core/scheduler"
     "fmt"
     "testing"
 )

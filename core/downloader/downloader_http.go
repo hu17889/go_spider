@@ -1,9 +1,9 @@
 package downloader
 
 import (
-    "core/common/mlog"
-    "core/common/page"
-    "core/common/request"
+    "github.com/hu17889/core/common/mlog"
+    "github.com/hu17889/core/common/page"
+    "github.com/hu17889/core/common/request"
     "github.com/PuerkitoBio/goquery"
     "github.com/bitly/go-simplejson"
     "io/ioutil"

@@ -3,7 +3,7 @@
 package page_items
 
 import (
-    "core/common/request"
+    "github.com/hu17889/core/common/request"
 )
 
 // PageItems represents an entity save result parsed by PageProcesser and will be output at last.

@@ -2,8 +2,8 @@
 package downloader
 
 import (
-    "core/common/page"
-    "core/common/request"
+    "github.com/hu17889/core/common/page"
+    "github.com/hu17889/core/common/request"
 )
 
 type Downloader interface {

@@ -6,9 +6,9 @@
 package downloader_test
 
 import (
-    "core/common/page"
-    "core/common/request"
-    "core/downloader"
+    "github.com/hu17889/core/common/page"
+    "github.com/hu17889/core/common/request"
+    "github.com/hu17889/core/downloader"
     "fmt"
     "github.com/PuerkitoBio/goquery"
     "testing"

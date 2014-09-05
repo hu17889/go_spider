@@ -10,9 +10,9 @@ Pckages may be imported:
     "github.com/PuerkitoBio/goquery": html dom parser.
 */
 import (
-    "core/common/page"
-    "core/pipeline"
-    "core/spider"
+    "github.com/hu17889/core/common/page"
+    "github.com/hu17889/core/pipeline"
+    "github.com/hu17889/core/spider"
     "github.com/PuerkitoBio/goquery"
     "strings"
 )

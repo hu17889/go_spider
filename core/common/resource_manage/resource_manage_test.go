@@ -2,7 +2,7 @@
 package resource_manage_test
 
 import (
-    "core/common/resource_manage"
+    "github.com/hu17889/core/common/resource_manage"
     "testing"
 )
 

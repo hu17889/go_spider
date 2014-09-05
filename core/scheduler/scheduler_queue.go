@@ -6,7 +6,7 @@
 package scheduler
 
 import (
-    "core/common/request"
+    "github.com/hu17889/core/common/request"
 )
 
 type QueueScheduler struct {

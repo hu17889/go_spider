@@ -1,8 +1,8 @@
 package pipeline
 
 import (
-    "core/common/com_interfaces"
-    "core/common/page_items"
+    "github.com/hu17889/core/common/com_interfaces"
+    "github.com/hu17889/core/common/page_items"
 )
 
 type PipelineConsole struct {

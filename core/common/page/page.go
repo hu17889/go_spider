@@ -3,8 +3,8 @@
 package page
 
 import (
-    "core/common/page_items"
-    "core/common/request"
+    "github.com/hu17889/core/common/page_items"
+    "github.com/hu17889/core/common/request"
     "github.com/PuerkitoBio/goquery"
     "github.com/bitly/go-simplejson"
 )

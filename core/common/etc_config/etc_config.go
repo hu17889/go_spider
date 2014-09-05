@@ -2,8 +2,8 @@
 package etc_config
 
 import (
-    "core/common/config"
-    "core/common/util"
+    "github.com/hu17889/core/common/config"
+    "github.com/hu17889/core/common/util"
     "os"
 )
 

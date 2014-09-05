@@ -2,8 +2,8 @@
 package main
 
 import (
-    "core/common/page"
-    "core/spider"
+    "github.com/hu17889/core/common/page"
+    "github.com/hu17889/core/spider"
     "fmt"
     "strings"
 )
