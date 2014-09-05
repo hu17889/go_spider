@@ -2,8 +2,8 @@
 package etc_config
 
 import (
-    "github.com/hu17889/core/common/config"
-    "github.com/hu17889/core/common/util"
+    "github.com/hu17889/go_spider/core/common/config"
+    "github.com/hu17889/go_spider/core/common/util"
     "os"
 )
 

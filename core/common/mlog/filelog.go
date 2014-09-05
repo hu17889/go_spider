@@ -1,7 +1,7 @@
 package mlog
 
 import (
-    "github.com/hu17889/core/common/etc_config"
+    "github.com/hu17889/go_spider/core/common/etc_config"
     "log"
     "os"
     "strconv"

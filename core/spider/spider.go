@@ -2,16 +2,16 @@
 package spider
 
 import (
-    "github.com/hu17889/core/common/etc_config"
-    "github.com/hu17889/core/common/mlog"
-    "github.com/hu17889/core/common/page_items"
-    "github.com/hu17889/core/common/request"
-    "github.com/hu17889/core/common/resource_manage"
-    "github.com/hu17889/core/downloader"
-    "github.com/hu17889/core/page_processer"
-    "github.com/hu17889/core/pipeline"
-    "github.com/hu17889/core/scheduler"
     "fmt"
+    "github.com/hu17889/go_spider/core/common/etc_config"
+    "github.com/hu17889/go_spider/core/common/mlog"
+    "github.com/hu17889/go_spider/core/common/page_items"
+    "github.com/hu17889/go_spider/core/common/request"
+    "github.com/hu17889/go_spider/core/common/resource_manage"
+    "github.com/hu17889/go_spider/core/downloader"
+    "github.com/hu17889/go_spider/core/page_processer"
+    "github.com/hu17889/go_spider/core/pipeline"
+    "github.com/hu17889/go_spider/core/scheduler"
     //"time"
     //"math/rand"
 )

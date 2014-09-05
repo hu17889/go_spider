@@ -3,10 +3,10 @@
 package page
 
 import (
-    "github.com/hu17889/core/common/page_items"
-    "github.com/hu17889/core/common/request"
     "github.com/PuerkitoBio/goquery"
     "github.com/bitly/go-simplejson"
+    "github.com/hu17889/go_spider/core/common/page_items"
+    "github.com/hu17889/go_spider/core/common/request"
 )
 
 // Page represents an entity be crawled.

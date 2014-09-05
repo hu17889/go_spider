@@ -2,8 +2,8 @@
 package pipeline
 
 import (
-    "github.com/hu17889/core/common/com_interfaces"
-    "github.com/hu17889/core/common/page_items"
+    "github.com/hu17889/go_spider/core/common/com_interfaces"
+    "github.com/hu17889/go_spider/core/common/page_items"
 )
 
 // The interface Pipeline can be implemented to customize ways of persistent.

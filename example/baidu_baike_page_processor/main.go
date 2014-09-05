@@ -2,9 +2,9 @@
 package main
 
 import (
-    "github.com/hu17889/core/common/page"
-    "github.com/hu17889/core/spider"
     "fmt"
+    "github.com/hu17889/go_spider/core/common/page"
+    "github.com/hu17889/go_spider/core/spider"
     "strings"
 )
 

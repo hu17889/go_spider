@@ -6,11 +6,11 @@
 package downloader_test
 
 import (
-    "github.com/hu17889/core/common/page"
-    "github.com/hu17889/core/common/request"
-    "github.com/hu17889/core/downloader"
     "fmt"
     "github.com/PuerkitoBio/goquery"
+    "github.com/hu17889/go_spider/core/common/page"
+    "github.com/hu17889/go_spider/core/common/request"
+    "github.com/hu17889/go_spider/core/downloader"
     "testing"
 )
 
