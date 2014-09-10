@@ -37,7 +37,7 @@ func main() {
     //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
     sp := spider.NewSpider(NewMyPageProcesser(), "", "TaskName")
-    pageItems := sp.SetDebug(true).Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json")
+    pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json")
 
     url := pageItems.GetRequest().GetUrl()
     println("-----------------------------------spider.Get---------------------------------")

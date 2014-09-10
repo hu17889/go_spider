@@ -101,7 +101,7 @@ func (this *HttpDownloader) downloadJson(req *request.Request) *page.Page {
     // json result
     var p *page.Page = page.NewPage(req).
         SetBodyStr(string(body)).
-        SetJsonMap(r)
+        SetJson(r)
 
     return p
 }

@@ -36,7 +36,7 @@ func NewPage(req *request.Request) *Page {
     return &Page{pItems: page_items.NewPageItems(req), req: req}
 }
 
-// AddField saves KV pair to PageItems preparing for Pipeline
+// AddField saves KV string pair to PageItems preparing for Pipeline
 func (this *Page) AddField(name string, value string) {
     this.pItems.AddItem(name, value)
 }
@@ -109,13 +109,13 @@ func (this *Page) GetHtmlParser() *goquery.Document {
     return this.docParser
 }
 
-// SetJsonMap saves json result.
-func (this *Page) SetJsonMap(js *simplejson.Json) *Page {
+// SetJson saves json result.
+func (this *Page) SetJson(js *simplejson.Json) *Page {
     this.jsonMap = js
     return this
 }
 
-// SetJsonMap returns json result.
-func (this *Page) GetJsonMap() *simplejson.Json {
+// SetJson returns json result.
+func (this *Page) GetJson() *simplejson.Json {
     return this.jsonMap
 }

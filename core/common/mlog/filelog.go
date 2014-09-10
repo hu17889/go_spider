@@ -1,7 +1,6 @@
 package mlog
 
 import (
-    "github.com/hu17889/go_spider/core/common/etc_config"
     "log"
     "os"
     "strconv"
@@ -23,28 +22,26 @@ var flog *filelog
 // LogInst get the singleton filelog object.
 func LogInst() *filelog {
     if flog == nil {
-        flog = newFilelog()
+        flog = newFilelog(false, "")
     }
     return flog
 }
 
+// The InitFilelog is init the flog.
+func InitFilelog(isopen bool, filepath string) {
+    if filepath == "" {
+        wd := os.Getenv("GOPATH")
+        if wd == "" {
+            panic("GOPATH is not setted in env.")
+        }
+        filepath = wd + "/log/"
+    }
+    flog = newFilelog(isopen, filepath)
+}
+
 // The newFilelog returns initialized filelog object.
 // The default file path is "WORKDIR/log/log.2011-01-01".
-func newFilelog() *filelog {
-    logconf := etc_config.Conf().SectionContent("log")
-    var isopen bool = false
-    if value, ok := logconf["isopen"]; ok && value == "true" {
-        isopen = true
-    }
-
-    var logpath string
-    if value, ok := logconf["logpath"]; ok {
-        logpath = value + "/"
-    } else {
-        file, _ := os.Getwd()
-        logpath = file + "/log/"
-    }
-
+func newFilelog(isopen bool, logpath string) *filelog {
     year, month, day := time.Now().Date()
     filename := "log." + strconv.Itoa(year) + "-" + strconv.Itoa(int(month)) + "-" + strconv.Itoa(day)
     err := os.MkdirAll(logpath, 0755)

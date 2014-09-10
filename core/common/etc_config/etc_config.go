@@ -9,7 +9,11 @@ import (
 
 // Configpath gets default config path like "WD/etc/main.conf".
 func configpath() string {
-    wd, _ := os.Getwd()
+    //wd, _ := os.Getwd()
+    wd := os.Getenv("GOPATH")
+    if wd == "" {
+        panic("GOPATH is not setted in env.")
+    }
     logpath := wd + "/etc/"
     filename := "main.conf"
     err := os.MkdirAll(logpath, 0755)

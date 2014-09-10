@@ -3,14 +3,14 @@ package resource_manage
 // ResourceManageChan inherits the ResourceManage interface.
 // In spider, ResourceManageChan manage resource of Coroutine to crawl page.
 type ResourceManageChan struct {
-    capnum int
-    mc     chan int
+    capnum uint
+    mc     chan uint
 }
 
 // NewResourceManageChan returns initialized ResourceManageChan object which contains a resource pool.
 // The num is the resource limit.
-func NewResourceManageChan(num int) *ResourceManageChan {
-    mc := make(chan int, num)
+func NewResourceManageChan(num uint) *ResourceManageChan {
+    mc := make(chan uint, num)
     return &ResourceManageChan{mc: mc, capnum: num}
 }
 
@@ -26,11 +26,11 @@ func (this *ResourceManageChan) FreeOne() {
 }
 
 // The Has query for how many resource has been used.
-func (this *ResourceManageChan) Has() int {
-    return len(this.mc)
+func (this *ResourceManageChan) Has() uint {
+    return uint(len(this.mc))
 }
 
 // The Left query for how many resource left in the pool.
-func (this *ResourceManageChan) Left() int {
-    return this.capnum - len(this.mc)
+func (this *ResourceManageChan) Left() uint {
+    return this.capnum - uint(len(this.mc))
 }
