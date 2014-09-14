@@ -10,8 +10,8 @@ import (
     "github.com/hu17889/go_spider/core/page_processer"
     "github.com/hu17889/go_spider/core/pipeline"
     "github.com/hu17889/go_spider/core/scheduler"
-    "time"
     "math/rand"
+    "time"
 )
 
 type Spider struct {
@@ -33,8 +33,8 @@ type Spider struct {
 
     // Sleeptype can be fixed or rand.
     startSleeptime uint
-    endSleeptime uint
-    sleeptype string
+    endSleeptime   uint
+    sleeptype      string
 }
 
 // Spider is scheduler module for all the other modules, like downloader, pipeline, scheduler and etc.
@@ -65,7 +65,6 @@ func NewSpider(pageinst page_processer.PageProcesser, confpath string, taskname 
 
     return ap
 }
-
 
 func (this *Spider) Taskname() string {
     return this.taskname
@@ -211,21 +210,21 @@ func (this *Spider) CloseStrace() *Spider {
 // If sleeptype is "fixed", the s is the sleep time and e is useless.
 // If sleeptype is "rand", the sleep time is rand between s and e.
 func (this *Spider) SetSleepTime(sleeptype string, s uint, e uint) *Spider {
-    this.sleeptype = sleeptype 
+    this.sleeptype = sleeptype
     this.startSleeptime = s
     this.endSleeptime = e
-    if this.sleeptype=="rand" && this.startSleeptime >= this.endSleeptime {
-        panic("startSleeptime must smaller than endSleeptime");
+    if this.sleeptype == "rand" && this.startSleeptime >= this.endSleeptime {
+        panic("startSleeptime must smaller than endSleeptime")
     }
     return this
 }
 
 func (this *Spider) sleep() {
-    if this.sleeptype=="fixed" {
+    if this.sleeptype == "fixed" {
         time.Sleep(time.Duration(this.startSleeptime) * time.Millisecond)
-    } else if this.sleeptype=="rand" {
-        sleeptime := rand.Intn(int(this.endSleeptime - this.startSleeptime)) + int(this.startSleeptime)
-        time.Sleep(time.Duration(sleeptime)  * time.Millisecond)
+    } else if this.sleeptype == "rand" {
+        sleeptime := rand.Intn(int(this.endSleeptime-this.startSleeptime)) + int(this.startSleeptime)
+        time.Sleep(time.Duration(sleeptime) * time.Millisecond)
     }
 }
 

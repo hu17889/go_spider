@@ -7,8 +7,8 @@ import (
 )
 
 func TestResourceManage(t *testing.T) {
-    var mc *mcounter.ResourceManage
-    mc = mcounter.NewResourceManageChan(1)
+    var mc *resource_manage.ResourceManageChan
+    mc = resource_manage.NewResourceManageChan(1)
     mc.GetOne()
     println("incr")
     mc.FreeOne()

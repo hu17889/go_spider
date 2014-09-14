@@ -67,7 +67,7 @@ func TestDownloadJson(t *testing.T) {
     p = dl.Download(req)
 
     var jsonMap interface{}
-    jsonMap = p.GetJsonMap()
+    jsonMap = p.GetJson()
     fmt.Printf("%v", jsonMap)
 
     //fmt.Println(doc)
