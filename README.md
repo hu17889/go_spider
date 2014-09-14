@@ -1,5 +1,7 @@
 go_spider
 =========
+[![Build Status](https://travis-ci.org/hu17889/go_spider.svg)](https://travis-ci.org/hu17889/go_spider)
+
 
 **v0.1** First Milestone，完成基本框架
 
