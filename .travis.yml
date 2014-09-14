@@ -1,14 +1,13 @@
 language: go
 
 go:
-  	- 1.1
- 	- 1.2
+    - 1.1
+    - 1.2
     - tip
 
 script:
-	- go test -v ./...
+    - go test -v ./...
 
 install:
-	- go get github.com/PuerkitoBio/goquery
-	- go get github.com/bitly/go-simplejson
-	
+    - go get github.com/PuerkitoBio/goquery
+    - go get github.com/bitly/go-simplejson
