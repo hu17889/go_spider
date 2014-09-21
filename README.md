@@ -3,12 +3,12 @@ go_spider
 [![Build Status](https://travis-ci.org/hu17889/go_spider.svg)](https://travis-ci.org/hu17889/go_spider)
 
 
-**v0.1** First Milestone，完成基本框架
+**v1.0** 完成基本框架与完整爬虫功能。
 
 ## 简介
 
 
-本项目基于golang开发，是一个垂直领域的爬虫引擎，主要希望能将各个功能模块区分开，方便使用者重新实现子模块，进而构建自己垂直方方向的爬虫。
+本项目基于golang开发，是一个开放的垂直领域的爬虫引擎，主要希望能将各个功能模块区分开，方便使用者重新实现子模块，进而构建自己垂直方方向的爬虫。
 
 本项目将爬虫的各个功能流程区分成Spider模块（主控），Downloader模块（下载器），PageProcesser模块（页面分析），Scheduler模块（任务队列），Pipeline模块（结果输出）；
 
