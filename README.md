@@ -64,12 +64,27 @@ go get github.com/bitly/go-simplejson
 * 执行：`./bin/github_repo_page_processor`
 
 
-## 简单示例代码
+## 简单示例代码说明
 
-示例中在main包中实现了爬虫创建，初始化，以及PageProcesser模块的继承实现。
 示例的功能是爬取[https://github.com/hu17889?tab=repositories](https://github.com/hu17889?tab=repositories)下面的项目以及项目详情页的相关信息，并将内容输出到标准输出。
 
-更对示例可参看[examples](https://github.com/hu17889/go_spider/tree/master/example)。
+
+一般在自己的爬虫main包中需要实现爬虫创建，初始化，以及PageProcesser模块的继承实现。可以实现自己的子模块或者使用项目中已经存在的子模块，通过Spider对象中相应的Set或者Add函数将模块引入爬虫。本项目支持**链式调用**。
+``` Go
+spider.NewSpider(NewMyPageProcesser(), "TaskName").                // 创建PageProcesser和Spider，设置任务名称
+    AddUrl("https://github.com/hu17889?tab=repositories", "html"). // 加入初始爬取链接，需要设置爬取结果类型，方便找到相应的解析器
+    AddPipeline(pipeline.NewPipelineConsole()).                    // 引入PipelineConsole输入结果到标准输出
+    SetThreadnum(3).                                               // 设置爬取参数：并发个数
+    Run()                                                          // 开始执行
+```
+
+
+* 更对示例可参看[examples](https://github.com/hu17889/go_spider/tree/master/example)。
+
+* 具体模块的说明见[模块说明](##模块)
+
+
+完整代码如下：
 
 ``` Go
 //
@@ -127,9 +142,8 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     // spider input:
     //  PageProcesser ;
-    //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
-    spider.NewSpider(NewMyPageProcesser(), "", "TaskName").
+    spider.NewSpider(NewMyPageProcesser(), "TaskName").
         AddUrl("https://github.com/hu17889?tab=repositories", "html"). // start url, html is the responce type ("html" or "json")
         AddPipeline(pipeline.NewPipelineConsole()).                    // print result on screen
         SetThreadnum(3).                                               // crawl request by three Coroutines
@@ -144,6 +158,8 @@ func main() {
 ### [Spider](http://godoc.org/github.com/hu17889/go_spider/core/spider)
 
 **功能**：用户一般无需自己实现。完成爬虫初始化，如加入各个默认子模块，管理并发，调度其他模块以及相关参数设置。
+
+**使用**：在main
 
 
 ### [Downloader](http://godoc.org/github.com/hu17889/go_spider/core/downloader)
