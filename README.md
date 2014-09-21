@@ -165,4 +165,6 @@ func main() {
 
 ## 感谢
 
-此项目的初始架构思路来自于JAVA爬虫项目[webmagic](https://github.com/code4craft/webmagic)
+此项目的初始架构思路来自于JAVA爬虫项目[webmagic](https://github.com/code4craft/webmagic);
+同时依赖于开源GOLANG包[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)，[goquery包](https://github.com/PuerkitoBio/goquery)；
+在此对以上开源项目表示感谢。
