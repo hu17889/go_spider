@@ -79,9 +79,10 @@ spider.NewSpider(NewMyPageProcesser(), "TaskName").                // 创建Page
 ```
 
 
+
 * 更对示例可参看[examples](https://github.com/hu17889/go_spider/tree/master/example)。
 
-* 具体模块的说明见[模块说明](##模块)
+* 具体模块的说明见[模块说明](#模块)
 
 
 完整代码如下：
