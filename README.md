@@ -64,7 +64,7 @@ go get github.com/bitly/go-simplejson
 * 执行：`./bin/github_repo_page_processor`
 
 
-## 简单示例
+## 简单示例代码
 
 示例中在main包中实现了爬虫创建，初始化，以及PageProcesser模块的继承实现。
 示例的功能是爬取[https://github.com/hu17889?tab=repositories](https://github.com/hu17889?tab=repositories)下面的项目以及项目详情页的相关信息，并将内容输出到标准输出。
