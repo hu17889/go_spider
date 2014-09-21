@@ -148,7 +148,7 @@ func main() {
 
 ### [Downloader](http://godoc.org/github.com/hu17889/go_spider/core/downloader)
 
-**功能**：用户一般无需自己实现。Spider从Scheduler的Request队列中获取包含待抓取url的Request对象，传入Downloader，Downloader下载该Request对象中的url所对应的页面或者其他类型的数据，现在支持html和json两种结果类型或者无结果类型，生成Page对象，同时找到下载结果所对应的解析go包并生成解析器存入Page对象中，如html是[goquery包](https://github.com/PuerkitoBio/goquery)，json数据是[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)。
+**功能**：用户可选择自己实现。Spider从Scheduler的Request队列中获取包含待抓取url的Request对象，传入Downloader，Downloader下载该Request对象中的url所对应的页面或者其他类型的数据，现在支持html和json两种结果类型或者无结果类型，生成Page对象，同时找到下载结果所对应的解析go包并生成解析器存入Page对象中，如html是[goquery包](https://github.com/PuerkitoBio/goquery)，json数据是[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)。
 
 
 ### [PageProcesser](http://godoc.org/github.com/hu17889/go_spider/core/page_processer)
