@@ -53,9 +53,8 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     // spider input:
     //  PageProcesser ;
-    //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
-    spider.NewSpider(NewMyPageProcesser(), "", "TaskName").
+    spider.NewSpider(NewMyPageProcesser(), "TaskName").
         AddUrl("https://github.com/hu17889?tab=repositories", "html"). // start url, html is the responce type ("html" or "json")
         AddPipeline(pipeline.NewPipelineConsole()).                    // print result on screen
         SetThreadnum(3).                                               // crawl request by three Coroutines

@@ -34,9 +34,8 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     // spider input:
     //  PageProcesser ;
-    //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
-    sp := spider.NewSpider(NewMyPageProcesser(), "", "TaskName")
+    sp := spider.NewSpider(NewMyPageProcesser(), "TaskName")
     pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json")
 
     url := pageItems.GetRequest().GetUrl()

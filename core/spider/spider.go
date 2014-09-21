@@ -38,9 +38,8 @@ type Spider struct {
 }
 
 // Spider is scheduler module for all the other modules, like downloader, pipeline, scheduler and etc.
-// The confpath could be empty string, then config will use default path "WD/etc/main.conf"
 // The taskname could be empty string too, or it can be used in Pipeline for record the result crawled by which task;
-func NewSpider(pageinst page_processer.PageProcesser, confpath string, taskname string) *Spider {
+func NewSpider(pageinst page_processer.PageProcesser, taskname string) *Spider {
     mlog.StraceInst().Open()
 
     ap := &Spider{taskname: taskname, pPageProcesser: pageinst}

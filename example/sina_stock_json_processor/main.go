@@ -80,9 +80,8 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     // spider input:
     //  PageProcesser ;
-    //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
-    spider.NewSpider(NewMyPageProcesser(), "", "sina_stock_news").
+    spider.NewSpider(NewMyPageProcesser(), "sina_stock_news").
         AddUrl("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=63621&pagesize=10&dire=f", "json"). // start url, html is the responce type ("html" or "json")
         AddPipeline(pipeline.NewPipelineConsole()).                                                                                   // Print result to std output
         AddPipeline(pipeline.NewPipelineFile("/tmp/sinafile")).                                                                       // Print result in file
