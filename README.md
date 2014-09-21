@@ -63,7 +63,7 @@ go get github.com/bitly/go-simplejson
 ## 简单示例
 
 示例中在main包中实现了爬虫创建，初始化，以及PageProcesser模块的继承实现。
-示例的功能是爬取https://github.com/hu17889?tab=repositories下面的项目以及项目详情页的相关信息，并将内容输出到标准输出。
+示例的功能是爬取[https://github.com/hu17889?tab=repositories](https://github.com/hu17889?tab=repositories)下面的项目以及项目详情页的相关信息，并将内容输出到标准输出。
 
 ``` Go
 //
