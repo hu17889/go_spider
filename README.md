@@ -14,11 +14,12 @@ go_spider
 
 
 **执行过程简述**：
+
+
 1. Spider从Scheduler中获取包含待抓取url的Request对象，传入Downloader，Downloader下载该url所对应的页面或者其他类型的数据，生成Page对象；
 2. Spider调用PageProcesser模块解析Page中的数据，并存入Page中的PageItems中（以Key-Value对的形式保存），同时存入解析结果中的待抓取链接，Spider会将待抓取链接存入Scheduler模块中的Request队列中；
 3. Spider调用Pipeline模块输出Page中的PageItems的结果;
 4. 执行步骤1，直至所有链接被处理完成，则Spider被挂起等待下一个待抓取链接或者终止。
-
 
 
 ![image](https://github.com/hu17889/doc/blob/master/go_spider/img/project.png)
