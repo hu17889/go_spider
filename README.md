@@ -51,13 +51,17 @@ func (this *Spider) pageProcess(req *request.Request) {
 ```
 
 
-## 安装
+## 安装与示例执行
 
+* 安装本包和依赖包
 ```
 go get github.com/hu17889/go_spider
 go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
 ```
+
+* 编译：`go install github.com/hu17889/go_spider/example/github_repo_page_processor`
+* 执行：`./bin/github_repo_page_processor`
 
 
 ## 简单示例
