@@ -162,3 +162,7 @@ func main() {
 ### [Pipeline](http://godoc.org/github.com/hu17889/go_spider/core/pipeline)
 
 **功能**：用户可以选择自己实现。此模块主要完成数据的输出与持久化。在PageProcesser模块中可用数据被存入了Page对象中的PageItems对象中，此处会获取PageItems的结果并按照自己的要求输出。已有的样例有：PipelineConsole（输出到标准输出），PipelineFile（输出到文件中）
+
+## 感谢
+
+此项目的初始架构思路来自于JAVA爬虫项目[webmagic](https://github.com/code4craft/webmagic)
