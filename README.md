@@ -51,19 +51,41 @@ func (this *Spider) pageProcess(req *request.Request) {
 ```
 
 
-## 安装
+## 安装与示例执行
 
+* 安装本包和依赖包
 ```
 go get github.com/hu17889/go_spider
 go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
 ```
 
+* 编译：`go install github.com/hu17889/go_spider/example/github_repo_page_processor`
+* 执行：`./bin/github_repo_page_processor`
 
-## 简单示例
 
-示例中在main包中实现了爬虫创建，初始化，以及PageProcesser模块的继承实现。
+## 简单示例代码说明
+
 示例的功能是爬取[https://github.com/hu17889?tab=repositories](https://github.com/hu17889?tab=repositories)下面的项目以及项目详情页的相关信息，并将内容输出到标准输出。
+
+
+一般在自己的爬虫main包中需要实现爬虫创建，初始化，以及PageProcesser模块的继承实现。可以实现自己的子模块或者使用项目中已经存在的子模块，通过Spider对象中相应的Set或者Add函数将模块引入爬虫。本项目支持**链式调用**。
+``` Go
+spider.NewSpider(NewMyPageProcesser(), "TaskName").                // 创建PageProcesser和Spider，设置任务名称
+    AddUrl("https://github.com/hu17889?tab=repositories", "html"). // 加入初始爬取链接，需要设置爬取结果类型，方便找到相应的解析器
+    AddPipeline(pipeline.NewPipelineConsole()).                    // 引入PipelineConsole输入结果到标准输出
+    SetThreadnum(3).                                               // 设置爬取参数：并发个数
+    Run()                                                          // 开始执行
+```
+
+
+
+* 更对示例可参看[examples](https://github.com/hu17889/go_spider/tree/master/example)。
+
+* 具体模块的说明见[模块说明](#模块)
+
+
+完整代码如下：
 
 ``` Go
 //
@@ -121,9 +143,8 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 func main() {
     // spider input:
     //  PageProcesser ;
-    //  config path(default: WD/etc/main.conf);
     //  task name used in Pipeline for record;
-    spider.NewSpider(NewMyPageProcesser(), "", "TaskName").
+    spider.NewSpider(NewMyPageProcesser(), "TaskName").
         AddUrl("https://github.com/hu17889?tab=repositories", "html"). // start url, html is the responce type ("html" or "json")
         AddPipeline(pipeline.NewPipelineConsole()).                    // print result on screen
         SetThreadnum(3).                                               // crawl request by three Coroutines
@@ -139,10 +160,12 @@ func main() {
 
 **功能**：用户一般无需自己实现。完成爬虫初始化，如加入各个默认子模块，管理并发，调度其他模块以及相关参数设置。
 
+**使用**：在main
+
 
 ### [Downloader](http://godoc.org/github.com/hu17889/go_spider/core/downloader)
 
-**功能**：用户一般无需自己实现。Spider从Scheduler的Request队列中获取包含待抓取url的Request对象，传入Downloader，Downloader下载该Request对象中的url所对应的页面或者其他类型的数据，现在支持html和json两种结果类型或者无结果类型，生成Page对象，同时找到下载结果所对应的解析go包并生成解析器存入Page对象中，如html是[goquery包](https://github.com/PuerkitoBio/goquery)，json数据是[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)。
+**功能**：用户可选择自己实现。Spider从Scheduler的Request队列中获取包含待抓取url的Request对象，传入Downloader，Downloader下载该Request对象中的url所对应的页面或者其他类型的数据，现在支持html和json两种结果类型或者无结果类型，生成Page对象，同时找到下载结果所对应的解析go包并生成解析器存入Page对象中，如html是[goquery包](https://github.com/PuerkitoBio/goquery)，json数据是[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)。
 
 
 ### [PageProcesser](http://godoc.org/github.com/hu17889/go_spider/core/page_processer)
@@ -158,3 +181,9 @@ func main() {
 ### [Pipeline](http://godoc.org/github.com/hu17889/go_spider/core/pipeline)
 
 **功能**：用户可以选择自己实现。此模块主要完成数据的输出与持久化。在PageProcesser模块中可用数据被存入了Page对象中的PageItems对象中，此处会获取PageItems的结果并按照自己的要求输出。已有的样例有：PipelineConsole（输出到标准输出），PipelineFile（输出到文件中）
+
+## 感谢
+
+此项目的初始架构思路来自于JAVA爬虫项目[webmagic](https://github.com/code4craft/webmagic);
+同时依赖于开源GOLANG包[simplejson包](https://github.com/bitly/go-simplejson/blob/master/simplejson.go)，[goquery包](https://github.com/PuerkitoBio/goquery)；
+在此对以上开源项目表示感谢。
