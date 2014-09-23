@@ -5,6 +5,8 @@ go_spider
 
 A crawler of vertical communities that achieved by GOLANG. 
 
+![image](https://github.com/hu17889/doc/blob/master/go_spider/img/logo.png)
+
 
 ## Features
 
