@@ -8,6 +8,9 @@ A crawler of vertical communities that achieved by GOLANG.
 ![image](https://github.com/hu17889/doc/blob/master/go_spider/img/logo.png)
 
 
+Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/go_spider/releases).
+
+
 ## Features
 
 
