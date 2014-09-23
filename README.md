@@ -3,7 +3,7 @@ go_spider
 [![Build Status](https://travis-ci.org/hu17889/go_spider.svg)](https://travis-ci.org/hu17889/go_spider)
 
 
-A crawler of vertical communities that achieve by GOLANG. 
+A crawler of vertical communities that achieved by GOLANG. 
 
 
 ## Features
@@ -18,6 +18,23 @@ A crawler of vertical communities that achieve by GOLANG.
 
 
 ## Installation
+
+```
+go get github.com/hu17889/go_spider
+go get github.com/PuerkitoBio/goquery
+go get github.com/bitly/go-simplejson
+```
+
+This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery)
+
+
+## Use example
+
+Here is an example for crawl github content. You can have a try for experience the crawl process.
+* `go install github.com/hu17889/go_spider/example/github_repo_page_processor`
+* `./bin/github_repo_page_processor`
+
+More examples here: [examples](https://github.com/hu17889/go_spider/tree/master/example)
 
 
 ## Useage
