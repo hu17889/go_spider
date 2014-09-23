@@ -13,9 +13,14 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 
 ## Features
 
+* Vertical communities
+* Flexible, Modularization
+* Native Go implementation
+
 
 ## Requirements
 
+* Go 1.1 or higher
 
 ## Documentation
 
