@@ -14,7 +14,7 @@ A crawler of vertical communities that achieved by GOLANG.
 
 ## Documentation
 
-[中文文档](https://github.com/hu17889/go_spider/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3)
+[中文文档](https://github.com/hu17889/go_spider/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3).
 
 
 ## Installation
@@ -25,7 +25,7 @@ go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
 ```
 
-This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery)
+This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
 
 
 ## Use example
@@ -34,7 +34,7 @@ Here is an example for crawl github content. You can have a try for experience t
 * `go install github.com/hu17889/go_spider/example/github_repo_page_processor`
 * `./bin/github_repo_page_processor`
 
-More examples here: [examples](https://github.com/hu17889/go_spider/tree/master/example)
+More examples here: [examples](https://github.com/hu17889/go_spider/tree/master/example).
 
 
 ## Useage
@@ -54,4 +54,4 @@ That means:
 
 Please read the [MPL 2.0 FAQ](http://www.mozilla.org/MPL/2.0/FAQ.html) if you have further questions regarding the license.
 
-You can read the full terms here: [LICENSE](https://raw.github.com/go-sql-driver/mysql/master/LICENSE)
+You can read the full terms here: [LICENSE](https://raw.github.com/go-sql-driver/mysql/master/LICENSE).
