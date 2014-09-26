@@ -48,7 +48,30 @@ Here is an example for crawl github content. You can have a try for experience t
 More examples here: [examples](https://github.com/hu17889/go_spider/tree/master/example).
 
 
-## Useage
+## Make your spider
+
+``` Go
+    // Spider input:
+    //  PageProcesser ;
+    //  Task name used in Pipeline for record;
+    spider.NewSpider(NewMyPageProcesser(), "TaskName").
+        AddUrl("https://github.com/hu17889?tab=repositories", "html"). // Start url, html is the responce type ("html" or "json")
+        AddPipeline(pipeline.NewPipelineConsole()).                    // Print result on screen
+        SetThreadnum(3).                                               // Crawl request by three Coroutines
+        Run()
+```
+
+- Use default modules 
+
+ - Downloader：HttpDownloader
+ - Scheduler：QueueScheduler
+ - Pipeline：PipelineConsole，PipelineFile
+
+- Use your modules
+
+Just copy the default modules and modify it!
+
+If you make a Pipeline module, you can use it by `Spider.AddPipeline(your_pipeline)`.
 
 
 ## License
