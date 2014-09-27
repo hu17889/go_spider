@@ -73,7 +73,9 @@ More examples here: [examples](https://github.com/hu17889/go_spider/tree/master/
 Just copy the default modules and modify it!
 
 If you make a Downloader module, you can use it by `Spider.SetDownloader(your_downloader)`.
+
 If you make a Pipeline module, you can use it by `Spider.AddPipeline(your_pipeline)`.
+
 If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_scheduler)`.
 
 
