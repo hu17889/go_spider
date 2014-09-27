@@ -22,7 +22,7 @@ var flog *filelog
 // LogInst get the singleton filelog object.
 func LogInst() *filelog {
     if flog == nil {
-        flog = newFilelog(false, "")
+        InitFilelog(false, "")
     }
     return flog
 }

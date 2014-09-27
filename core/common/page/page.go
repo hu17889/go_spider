@@ -11,6 +11,10 @@ import (
 
 // Page represents an entity be crawled.
 type Page struct {
+    // The isfail is true when crawl process is failed and errormsg is the fail resean.
+    isfail   bool
+    errormsg string
+
     // The request is crawled by spider that contains url and relevent information.
     req *request.Request
 
@@ -36,9 +40,25 @@ func NewPage(req *request.Request) *Page {
     return &Page{pItems: page_items.NewPageItems(req), req: req}
 }
 
+// IsSucc test whether download process success or not.
+func (this *Page) IsSucc() bool {
+    return !this.isfail
+}
+
+// Errormsg show the download error message.
+func (this *Page) Errormsg() string {
+    return this.errormsg
+}
+
+// SetStatus save status info about download process.
+func (this *Page) SetStatus(isfail bool, errormsg string) {
+    this.isfail = isfail
+    this.errormsg = errormsg
+}
+
 // AddField saves KV string pair to PageItems preparing for Pipeline
-func (this *Page) AddField(name string, value string) {
-    this.pItems.AddItem(name, value)
+func (this *Page) AddField(key string, value string) {
+    this.pItems.AddItem(key, value)
 }
 
 // GetPageItems returns PageItems object that record KV pair parsed in PageProcesser.

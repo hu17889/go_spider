@@ -18,6 +18,11 @@ func NewMyPageProcesser() *MyPageProcesser {
 // Parse html dom here and record the parse result that we want to crawl.
 // Package goquery (http://godoc.org/github.com/PuerkitoBio/goquery) is used to parse html.
 func (this *MyPageProcesser) Process(p *page.Page) {
+    if !p.IsSucc() {
+        println(p.Errormsg())
+        return
+    }
+
     query := p.GetHtmlParser()
 
     name := query.Find(".lemmaTitleH1").Text()

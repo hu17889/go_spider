@@ -185,6 +185,12 @@ func (this *Spider) OpenFileLog(filePath string) *Spider {
     return this
 }
 
+// OpenFileLogDefault open file log with default file path like "WD/log/log.2014-9-1".
+func (this *Spider) OpenFileLogDefault() *Spider {
+    mlog.InitFilelog(true, "")
+    return this
+}
+
 // The CloseFileLog close file log.
 func (this *Spider) CloseFileLog() *Spider {
     mlog.InitFilelog(false, "")
@@ -256,9 +262,6 @@ func (this *Spider) addRequest(req *request.Request) {
 // core processer
 func (this *Spider) pageProcess(req *request.Request) {
     p := this.pDownloader.Download(req)
-    if p == nil {
-        return
-    }
 
     // TODO: download retry
 

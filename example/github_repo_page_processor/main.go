@@ -27,6 +27,11 @@ func NewMyPageProcesser() *MyPageProcesser {
 // Parse html dom here and record the parse result that we want to Page.
 // Package goquery (http://godoc.org/github.com/PuerkitoBio/goquery) is used to parse html.
 func (this *MyPageProcesser) Process(p *page.Page) {
+    if !p.IsSucc() {
+        println(p.Errormsg())
+        return
+    }
+
     query := p.GetHtmlParser()
     var urls []string
     query.Find("h3[class='repo-list-name'] a").Each(func(i int, s *goquery.Selection) {
@@ -51,12 +56,12 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 }
 
 func main() {
-    // spider input:
+    // Spider input:
     //  PageProcesser ;
-    //  task name used in Pipeline for record;
+    //  Task name used in Pipeline for record;
     spider.NewSpider(NewMyPageProcesser(), "TaskName").
-        AddUrl("https://github.com/hu17889?tab=repositories", "html"). // start url, html is the responce type ("html" or "json")
-        AddPipeline(pipeline.NewPipelineConsole()).                    // print result on screen
-        SetThreadnum(3).                                               // crawl request by three Coroutines
+        AddUrl("https://github.com/hu17889?tab=repositories", "html"). // Start url, html is the responce type ("html" or "json")
+        AddPipeline(pipeline.NewPipelineConsole()).                    // Print result on screen
+        SetThreadnum(3).                                               // Crawl request by three Coroutines
         Run()
 }
