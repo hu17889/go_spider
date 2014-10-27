@@ -3,6 +3,7 @@ package spider
 
 import (
     "github.com/hu17889/go_spider/core/common/mlog"
+    "github.com/hu17889/go_spider/core/common/page"
     "github.com/hu17889/go_spider/core/common/page_items"
     "github.com/hu17889/go_spider/core/common/request"
     "github.com/hu17889/go_spider/core/common/resource_manage"
@@ -261,9 +262,13 @@ func (this *Spider) addRequest(req *request.Request) {
 
 // core processer
 func (this *Spider) pageProcess(req *request.Request) {
-    p := this.pDownloader.Download(req)
-
-    // TODO: download retry
+    var p *page.Page
+    p = this.pDownloader.Download(req)
+    if !p.IsSucc() {
+        // download retry
+        this.sleep()
+        p = this.pDownloader.Download(req)
+    }
 
     this.pPageProcesser.Process(p)
     for _, req := range p.GetTargetRequests() {
@@ -278,5 +283,4 @@ func (this *Spider) pageProcess(req *request.Request) {
     }
 
     this.sleep()
-
 }
