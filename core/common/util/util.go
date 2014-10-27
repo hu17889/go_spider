@@ -3,6 +3,7 @@ package util
 
 import (
     "os"
+    "regexp"
 )
 
 // The IsDirExists judges path is directory or not.
@@ -29,4 +30,10 @@ func IsFileExists(path string) bool {
     }
 
     panic("util isFileExists not reached")
+}
+
+// The IsNum judges string is number or not.
+func IsNum(a string) bool {
+    reg, _ := regexp.Compile("^\\d+$")
+    return reg.MatchString(a)
 }

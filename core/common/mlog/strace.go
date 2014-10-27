@@ -28,7 +28,7 @@ func StraceInst() *strace {
 // The newStrace returns initialized strace object.
 func newStrace() *strace {
     pstrace := &strace{}
-    pstrace.loginst = log.New(os.Stderr, "", log.Llongfile|log.LstdFlags)
+    pstrace.loginst = log.New(os.Stderr, "", log.LstdFlags)
     pstrace.isopen = true
     return pstrace
 }
@@ -38,5 +38,5 @@ func (this *strace) Println(str string) {
     if !this.isopen {
         return
     }
-    this.loginst.Println(str)
+    this.loginst.Printf("%s\n", str)
 }

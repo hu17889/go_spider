@@ -36,8 +36,9 @@ func (this *PageItems) AddItem(key string, item string) {
 }
 
 // GetItem returns value of the key.
-func (this *PageItems) GetItem(key string) string {
-    return this.items[key]
+func (this *PageItems) GetItem(key string) (string, bool) {
+    t, ok := this.items[key]
+    return t, ok
 }
 
 // GetAll returns all the KVs result.
