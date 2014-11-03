@@ -19,9 +19,9 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 
 * Concurrent 
 * Suit for vertical communities
-* Flexible, Modularization
+* Flexible, Modular
 * Native Go implementation
-* Can be expanded to individualization easily
+* Can be expanded to individualized easily
 
 
 ## Requirements
