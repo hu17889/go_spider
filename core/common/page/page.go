@@ -7,6 +7,7 @@ import (
     "github.com/bitly/go-simplejson"
     "github.com/hu17889/go_spider/core/common/page_items"
     "github.com/hu17889/go_spider/core/common/request"
+    "net/http"
 )
 
 // Page represents an entity be crawled.
@@ -20,6 +21,9 @@ type Page struct {
 
     // The body is plain text of crawl result.
     body string
+
+    header  map[string][]string
+    cookies []*http.Cookie
 
     // The docParser is a pointer of goquery boject that contains html result.
     docParser *goquery.Document
@@ -38,6 +42,26 @@ type Page struct {
 // NewPage returns initialized Page object.
 func NewPage(req *request.Request) *Page {
     return &Page{pItems: page_items.NewPageItems(req), req: req}
+}
+
+// SetHeader save the header of http responce
+func (this *Page) SetHeader(header map[string][]string) {
+    this.header = header
+}
+
+// GetHeader returns the header of http responce
+func (this *Page) GetHeader() map[string][]string {
+    return this.header
+}
+
+// SetHeader save the cookies of http responce
+func (this *Page) SetCookies(cookies []*http.Cookie) {
+    this.cookies = cookies
+}
+
+// GetHeader returns the cookies of http responce
+func (this *Page) GetCookies() []*http.Cookie {
+    return this.cookies
 }
 
 // IsSucc test whether download process success or not.

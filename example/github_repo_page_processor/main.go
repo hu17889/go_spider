@@ -60,7 +60,7 @@ func main() {
     //  PageProcesser ;
     //  Task name used in Pipeline for record;
     spider.NewSpider(NewMyPageProcesser(), "TaskName").
-        AddUrl("https://github.com/hu17889?tab=repositories", "html"). // Start url, html is the responce type ("html" or "json")
+        AddUrl("https://github.com/hu17889?tab=repositories", "html"). // Start url, html is the responce type ("html" or "json" or "jsonp" or "text")
         AddPipeline(pipeline.NewPipelineConsole()).                    // Print result on screen
         SetThreadnum(3).                                               // Crawl request by three Coroutines
         Run()

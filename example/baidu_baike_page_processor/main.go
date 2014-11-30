@@ -41,7 +41,7 @@ func main() {
     //  PageProcesser ;
     //  task name used in Pipeline for record;
     sp := spider.NewSpider(NewMyPageProcesser(), "TaskName")
-    pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json")
+    pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json" or "jsonp" or "text")
 
     url := pageItems.GetRequest().GetUrl()
     println("-----------------------------------spider.Get---------------------------------")
