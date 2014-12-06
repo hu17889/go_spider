@@ -127,7 +127,7 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 - Config setting:SetSkip, GetSkip(Not output result in pipeline if skip is true), AddTargetRequest, AddTargetRequests(Save urls crawled next stage), AddField(Save key-value pairs after parsing)
 
 
-## Scheduler
+### Scheduler
 
 **Summary:** The moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
 
@@ -137,7 +137,7 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 - Poll
 - Count
 
-## Pipeline
+### Pipeline
 
 **Summary:** The moduler will output the result and saved whereever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
 
