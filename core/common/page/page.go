@@ -8,6 +8,7 @@ import (
     "github.com/hu17889/go_spider/core/common/page_items"
     "github.com/hu17889/go_spider/core/common/request"
     "net/http"
+    //"fmt"
 )
 
 // Page represents an entity be crawled.

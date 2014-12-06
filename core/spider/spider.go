@@ -13,6 +13,7 @@ import (
     "github.com/hu17889/go_spider/core/scheduler"
     "math/rand"
     "time"
+    //"fmt"
 )
 
 type Spider struct {
@@ -53,7 +54,7 @@ func NewSpider(pageinst page_processer.PageProcesser, taskname string) *Spider {
 
     // init spider
     if ap.pScheduler == nil {
-        ap.SetScheduler(scheduler.NewQueueScheduler())
+        ap.SetScheduler(scheduler.NewQueueScheduler(false))
     }
 
     if ap.pDownloader == nil {
@@ -128,7 +129,7 @@ func (this *Spider) Run() {
 }
 
 func (this *Spider) close() {
-    this.SetScheduler(scheduler.NewQueueScheduler())
+    this.SetScheduler(scheduler.NewQueueScheduler(false))
     this.SetDownloader(downloader.NewHttpDownloader())
     this.pPiplelines = make([]pipeline.Pipeline, 0)
     this.exitWhenComplete = true
@@ -272,6 +273,7 @@ func (this *Spider) pageProcess(req *request.Request) {
 
     this.pPageProcesser.Process(p)
     for _, req := range p.GetTargetRequests() {
+        //fmt.Printf("%v\n",req)
         this.addRequest(req)
     }
 

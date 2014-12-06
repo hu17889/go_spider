@@ -186,7 +186,7 @@ func (this *HttpDownloader) downloadJson(p *page.Page, req *request.Request) *pa
 
     var r *simplejson.Json
     if r, err = simplejson.NewJson(body); err != nil {
-        mlog.LogInst().LogError(err.Error())
+        mlog.LogInst().LogError(string(body) + "\t" + err.Error())
         p.SetStatus(true, err.Error())
         return p
     }
