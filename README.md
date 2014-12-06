@@ -39,6 +39,7 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 go get github.com/hu17889/go_spider
 go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
+go get github.com/djimenez/iconv-go
 ```
 
 This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
