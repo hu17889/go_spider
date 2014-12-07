@@ -15,6 +15,7 @@ import (
 )
 
 func TestDownloadHtml(t *testing.T) {
+    return
     //request := request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&callback=t13975294&id=23521&pagesize=45&dire=f&dpc=1")
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/l/v/finance/globalnews1/", "html")
@@ -57,8 +58,29 @@ func TestDownloadHtml(t *testing.T) {
 }
 
 func TestDownloadJson(t *testing.T) {
+    return
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
+
+    var dl downloader.Downloader
+    dl = downloader.NewHttpDownloader()
+
+    var p *page.Page
+    p = dl.Download(req)
+
+    var jsonMap interface{}
+    jsonMap = p.GetJson()
+    fmt.Printf("%v", jsonMap)
+
+    //fmt.Println(doc)
+    //body := p.GetBodyStr()
+    //fmt.Println(body)
+
+}
+
+func TestCharSetChange(t *testing.T) {
+    var req *request.Request
+    req = request.NewRequest("http://stock.finance.sina.com.cn/usstock/api/jsonp.php/t/US_CategoryService.getList?page=1&num=60", "jsonp")
 
     var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
