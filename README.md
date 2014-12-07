@@ -26,7 +26,7 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 
 ## Requirements
 
-* Go 1.1 or higher
+* Go 1.2 or higher
 
 ## Documentation
 
@@ -82,6 +82,68 @@ If you make a Downloader module, you can use it by `Spider.SetDownloader(your_do
 If you make a Pipeline module, you can use it by `Spider.AddPipeline(your_pipeline)`.
 
 If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_scheduler)`.
+
+
+## Modulers
+
+### Spider
+
+**Summary:** Crawler initialization, concurrent management, default moduler, moduler management, config setting.
+
+**Functions:** 
+
+- Clawler startup functions: Get, GetAll, Run
+- Main moduler setting: AddPipeline(could have severl pipeline moduler), SetScheduler, SetDownloader
+- Config setting: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
+- Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open strace info print on screen by stderr), CloseStrace
+
+### Downloader
+
+**Summary:** Spider gets Request in Scheduler that has url needed be crawled. Then Downloader download the result(html, json, jsonp, text) of the Request. Result is saved in Page for parsing process in PageProcesser.
+Html parsing is depend on **goquery** package. Json parsing is depend on **simplejson** package. Jsonp will be transform to json. Text represents plain text content without parser. 
+
+**Functions:**
+
+- Download: download content of the crawl object. Result contains data body, header, cookies and request info.
+
+### PageProcesser
+
+**Summary:** The moduler only do result parsing. The moduler gets result(key-value pairs) and urls crawled next step. 
+These key-value pairs will saved in PageItems and urls will be pushed in Scheduler.
+
+**Functions:**
+
+- Process: Crawled object parsing.
+
+### Page
+
+**Summary:** save information of request.
+
+**Functions:** 
+
+- Get result crawled: GetJson, GetHtmlParser, GetBodyStr(plain text)
+- Get information of crawled object: GetRequest, GetCookies, GetHeader
+- Get Status of crawl process: IsSucc(Download success or not), Errormsg(Get error info in Downloader)
+- Config setting:SetSkip, GetSkip(Not output result in pipeline if skip is true), AddTargetRequest, AddTargetRequests(Save urls crawled next stage), AddField(Save key-value pairs after parsing)
+
+
+### Scheduler
+
+**Summary:** The moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
+
+**Functions:**
+
+- Push
+- Poll
+- Count
+
+### Pipeline
+
+**Summary:** The moduler will output the result and saved whereever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
+
+**Functions:**
+
+- Process
 
 
 ## License
