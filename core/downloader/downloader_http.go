@@ -4,13 +4,13 @@ import (
     "bytes"
     "github.com/PuerkitoBio/goquery"
     "github.com/bitly/go-simplejson"
-    iconv "github.com/djimenez/iconv-go"
-    "golang.org/x/text/encoding/simplifiedchinese"
-    "golang.org/x/text/transform"
+    //iconv "github.com/djimenez/iconv-go"
     "github.com/hu17889/go_spider/core/common/mlog"
     "github.com/hu17889/go_spider/core/common/page"
     "github.com/hu17889/go_spider/core/common/request"
     "github.com/hu17889/go_spider/core/common/util"
+    "golang.org/x/text/encoding/simplifiedchinese"
+    "golang.org/x/text/transform"
     "io"
     "io/ioutil"
     "net/http"
@@ -88,11 +88,11 @@ func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadClo
     ischange := true
     var tr transform.Transformer
     cs := strings.ToLower(charset)
-    if cs=="gbk" {
+    if cs == "gbk" {
         tr = simplifiedchinese.GBK.NewDecoder()
-    } else if cs=="gb18030" {
+    } else if cs == "gb18030" {
         tr = simplifiedchinese.GB18030.NewDecoder()
-    } else if cs=="hzgb2312" || cs=="gb2312" || cs=="hz-gb2312" {
+    } else if cs == "hzgb2312" || cs == "gb2312" || cs == "hz-gb2312" {
         tr = simplifiedchinese.HZGB2312.NewDecoder()
     } else {
         ischange = false
@@ -105,7 +105,7 @@ func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadClo
     } else {
         destReader = sor
     }
-        
+
     var sorbody []byte
     var err error
     if sorbody, err = ioutil.ReadAll(destReader); err != nil {
@@ -114,11 +114,11 @@ func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadClo
     }
     bodystr := string(sorbody)
 
-
     return bodystr
 }
 
 // Use go-iconv. Get page body and change it to utf-8
+/*
 func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadCloser) string {
     var err error
     var converter *iconv.Converter
@@ -151,7 +151,7 @@ func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadClos
     }
     return destbody
 }
-
+*/
 
 // Download file and change the charset of page charset.
 func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*page.Page, string) {
