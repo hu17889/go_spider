@@ -105,16 +105,16 @@ Html parsing is based on **goquery** package. Json parsing is based on **simplej
 
 **Functions:**
 
-- Download: download content of the crawl object. Result contains data body, header, cookies and request info.
+- Download: download content of the crawl objective. Result contains data body, header, cookies and request info.
 
 ### PageProcesser
 
-**Summary:** The moduler only do result parsing. The moduler gets result(key-value pairs) and urls crawled next step. 
-These key-value pairs will saved in PageItems and urls will be pushed in Scheduler.
+**Summary:** The PageProcesser moduler only parse results. The moduler gets results(key-value pairs) and urls to be crawled next step. 
+These key-value pairs will be saved in PageItems and urls will be pushed in Scheduler.
 
 **Functions:**
 
-- Process: Crawled object parsing.
+- Process: parse the objective crawled.
 
 ### Page
 
@@ -123,14 +123,14 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 **Functions:** 
 
 - Get result crawled: GetJson, GetHtmlParser, GetBodyStr(plain text)
-- Get information of crawled object: GetRequest, GetCookies, GetHeader
+- Get information of objective crawled: GetRequest, GetCookies, GetHeader
 - Get Status of crawl process: IsSucc(Download success or not), Errormsg(Get error info in Downloader)
-- Config setting:SetSkip, GetSkip(Not output result in pipeline if skip is true), AddTargetRequest, AddTargetRequests(Save urls crawled next stage), AddField(Save key-value pairs after parsing)
+- Config setting:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddField(Save key-value pairs after parsing)
 
 
 ### Scheduler
 
-**Summary:** The moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
+**Summary:** The Scheduler moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
 
 **Functions:**
 
@@ -140,7 +140,7 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 
 ### Pipeline
 
-**Summary:** The moduler will output the result and saved whereever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
+**Summary:** The Pipeline moduler will output the result and save wherever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
 
 **Functions:**
 
