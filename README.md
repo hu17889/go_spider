@@ -4,7 +4,7 @@ go_spider
 [![Build Status](https://travis-ci.org/hu17889/go_spider.svg)](https://travis-ci.org/hu17889/go_spider)
 
 
-A crawler of vertical communities that achieved by GOLANG. 
+A crawler of vertical communities achieved by GOLANG. 
 
 ![image](https://raw.githubusercontent.com/hu17889/doc/master/go_spider/img/logo.png)
 
@@ -18,10 +18,10 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 ## Features
 
 * Concurrent 
-* Suit for vertical communities
+* Fit for vertical communities
 * Flexible, Modular
 * Native Go implementation
-* Can be expanded to individualized easily
+* Can be expanded to an individualized crawler easily
 
 
 ## Requirements
@@ -43,12 +43,12 @@ go get golang.org/x/text/transform
 go get golang.org/x/text/encoding/simplifiedchinese
 ```
 
-This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
+This project is based on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
 
 
 ## Use example
 
-Here is an example for crawl github content. You can have a try for experience the crawl process.
+Here is an example for crawling github content. You can have a try of the crawl process.
 * `go install github.com/hu17889/go_spider/example/github_repo_page_processor`
 * `./bin/github_repo_page_processor`
 
@@ -94,14 +94,14 @@ If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_sche
 **Functions:** 
 
 - Clawler startup functions: Get, GetAll, Run
-- Main moduler setting: AddPipeline(could have severl pipeline moduler), SetScheduler, SetDownloader
+- Main moduler setting: AddPipeline(could have several pipeline modulers), SetScheduler, SetDownloader
 - Config setting: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
-- Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open strace info print on screen by stderr), CloseStrace
+- Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open tracing info printed on screen by stderr), CloseStrace
 
 ### Downloader
 
-**Summary:** Spider gets Request in Scheduler that has url needed be crawled. Then Downloader download the result(html, json, jsonp, text) of the Request. Result is saved in Page for parsing process in PageProcesser.
-Html parsing is depend on **goquery** package. Json parsing is depend on **simplejson** package. Jsonp will be transform to json. Text represents plain text content without parser. 
+**Summary:** Spider gets a Request in Scheduler that has url to be crawled. Then Downloader downloads the result(html, json, jsonp, text) of the Request. The result is saved in Page for parsing in PageProcesser.
+Html parsing is based on **goquery** package. Json parsing is based on **simplejson** package. Jsonp will be conversed to json. Text form represents plain text content without parser. 
 
 **Functions:**
 
