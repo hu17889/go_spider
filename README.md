@@ -94,8 +94,8 @@ If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_sche
 **Functions:** 
 
 - Clawler startup functions: Get, GetAll, Run
-- Main moduler setting: AddPipeline(could have several pipeline modulers), SetScheduler, SetDownloader
-- Config setting: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
+- Set main moduler: AddPipeline(could have several pipeline modulers), SetScheduler, SetDownloader
+- Set config: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
 - Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open tracing info printed on screen by stderr), CloseStrace
 
 ### Downloader
@@ -122,10 +122,10 @@ These key-value pairs will be saved in PageItems and urls will be pushed in Sche
 
 **Functions:** 
 
-- Get result crawled: GetJson, GetHtmlParser, GetBodyStr(plain text)
-- Get information of objective crawled: GetRequest, GetCookies, GetHeader
+- Get result: GetJson, GetHtmlParser, GetBodyStr(plain text)
+- Get information of objective: GetRequest, GetCookies, GetHeader
 - Get Status of crawl process: IsSucc(Download success or not), Errormsg(Get error info in Downloader)
-- Config setting:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddField(Save key-value pairs after parsing)
+- Set config:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddField(Save key-value pairs after parsing)
 
 
 ### Scheduler
