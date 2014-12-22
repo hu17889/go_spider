@@ -4,7 +4,7 @@ go_spider
 [![Build Status](https://travis-ci.org/hu17889/go_spider.svg)](https://travis-ci.org/hu17889/go_spider)
 
 
-A crawler of vertical communities that achieved by GOLANG. 
+A crawler of vertical communities achieved by GOLANG. 
 
 ![image](https://raw.githubusercontent.com/hu17889/doc/master/go_spider/img/logo.png)
 
@@ -18,10 +18,10 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 ## Features
 
 * Concurrent 
-* Suit for vertical communities
+* Fit for vertical communities
 * Flexible, Modular
 * Native Go implementation
-* Can be expanded to individualized easily
+* Can be expanded to an individualized crawler easily
 
 
 ## Requirements
@@ -39,15 +39,16 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 go get github.com/hu17889/go_spider
 go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
-go get github.com/djimenez/iconv-go
+go get golang.org/x/text/transform
+go get golang.org/x/text/encoding/simplifiedchinese
 ```
 
-This project is dependent on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
+This project is based on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
 
 
 ## Use example
 
-Here is an example for crawl github content. You can have a try for experience the crawl process.
+Here is an example for crawling github content. You can have a try of the crawl process.
 * `go install github.com/hu17889/go_spider/example/github_repo_page_processor`
 * `./bin/github_repo_page_processor`
 
@@ -93,27 +94,27 @@ If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_sche
 **Functions:** 
 
 - Clawler startup functions: Get, GetAll, Run
-- Main moduler setting: AddPipeline(could have severl pipeline moduler), SetScheduler, SetDownloader
-- Config setting: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
-- Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open strace info print on screen by stderr), CloseStrace
+- Set main moduler: AddPipeline(could have several pipeline modulers), SetScheduler, SetDownloader
+- Set config: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
+- Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open tracing info printed on screen by stderr), CloseStrace
 
 ### Downloader
 
-**Summary:** Spider gets Request in Scheduler that has url needed be crawled. Then Downloader download the result(html, json, jsonp, text) of the Request. Result is saved in Page for parsing process in PageProcesser.
-Html parsing is depend on **goquery** package. Json parsing is depend on **simplejson** package. Jsonp will be transform to json. Text represents plain text content without parser. 
+**Summary:** Spider gets a Request in Scheduler that has url to be crawled. Then Downloader downloads the result(html, json, jsonp, text) of the Request. The result is saved in Page for parsing in PageProcesser.
+Html parsing is based on **goquery** package. Json parsing is based on **simplejson** package. Jsonp will be conversed to json. Text form represents plain text content without parser. 
 
 **Functions:**
 
-- Download: download content of the crawl object. Result contains data body, header, cookies and request info.
+- Download: download content of the crawl objective. Result contains data body, header, cookies and request info.
 
 ### PageProcesser
 
-**Summary:** The moduler only do result parsing. The moduler gets result(key-value pairs) and urls crawled next step. 
-These key-value pairs will saved in PageItems and urls will be pushed in Scheduler.
+**Summary:** The PageProcesser moduler only parse results. The moduler gets results(key-value pairs) and urls to be crawled next step. 
+These key-value pairs will be saved in PageItems and urls will be pushed in Scheduler.
 
 **Functions:**
 
-- Process: Crawled object parsing.
+- Process: parse the objective crawled.
 
 ### Page
 
@@ -121,15 +122,15 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 
 **Functions:** 
 
-- Get result crawled: GetJson, GetHtmlParser, GetBodyStr(plain text)
-- Get information of crawled object: GetRequest, GetCookies, GetHeader
+- Get result: GetJson, GetHtmlParser, GetBodyStr(plain text)
+- Get information of objective: GetRequest, GetCookies, GetHeader
 - Get Status of crawl process: IsSucc(Download success or not), Errormsg(Get error info in Downloader)
-- Config setting:SetSkip, GetSkip(Not output result in pipeline if skip is true), AddTargetRequest, AddTargetRequests(Save urls crawled next stage), AddField(Save key-value pairs after parsing)
+- Set config:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddField(Save key-value pairs after parsing)
 
 
 ### Scheduler
 
-**Summary:** The moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
+**Summary:** The Scheduler moduler is a Request queue. Urls parsed in PageProcesser will be pushed in the queue.
 
 **Functions:**
 
@@ -139,7 +140,7 @@ These key-value pairs will saved in PageItems and urls will be pushed in Schedul
 
 ### Pipeline
 
-**Summary:** The moduler will output the result and saved whereever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
+**Summary:** The Pipeline moduler will output the result and save wherever you want. Default moduler is PipelineConsole(Output to stdout) and PipelineFile(Output to file)
 
 **Functions:**
 
