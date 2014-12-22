@@ -80,7 +80,8 @@ func TestDownloadJson(t *testing.T) {
 
 func TestCharSetChange(t *testing.T) {
     var req *request.Request
-    req = request.NewRequest("http://stock.finance.sina.com.cn/usstock/api/jsonp.php/t/US_CategoryService.getList?page=1&num=60", "jsonp")
+    //req = request.NewRequest("http://stock.finance.sina.com.cn/usstock/api/jsonp.php/t/US_CategoryService.getList?page=1&num=60", "jsonp")
+    req = request.NewRequest("http://soft.chinabyte.com/416/13164916.shtml", "html")
 
     var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
@@ -88,12 +89,12 @@ func TestCharSetChange(t *testing.T) {
     var p *page.Page
     p = dl.Download(req)
 
-    var jsonMap interface{}
-    jsonMap = p.GetJson()
-    fmt.Printf("%v", jsonMap)
+    //hp := p.GetHtmlParser()
+    //fmt.Printf("%v", jsonMap)
 
     //fmt.Println(doc)
-    //body := p.GetBodyStr()
-    //fmt.Println(body)
+    body := p.GetBodyStr()
+    fmt.Println(body)
 
 }
+

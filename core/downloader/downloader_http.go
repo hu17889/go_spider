@@ -83,6 +83,40 @@ func (this *HttpDownloader) getCharset(header http.Header) string {
     return charset
 }
 
+// Charset auto determine. Use golang.org/x/net/html/charset. Get page body and change it to utf-8
+func (this *HttpDownloader) changeCharsetEncodingAuto(charset string, sor io.ReadCloser) string {
+    ischange := true
+    var tr transform.Transformer
+    cs := strings.ToLower(charset)
+    if cs == "gbk" {
+        tr = simplifiedchinese.GBK.NewDecoder()
+    } else if cs == "gb18030" {
+        tr = simplifiedchinese.GB18030.NewDecoder()
+    } else if cs == "hzgb2312" || cs == "gb2312" || cs == "hz-gb2312" {
+        tr = simplifiedchinese.HZGB2312.NewDecoder()
+    } else {
+        ischange = false
+    }
+
+    var destReader io.Reader
+    if ischange {
+        transReader := transform.NewReader(sor, tr)
+        destReader = transReader
+    } else {
+        destReader = sor
+    }
+
+    var sorbody []byte
+    var err error
+    if sorbody, err = ioutil.ReadAll(destReader); err != nil {
+        mlog.LogInst().LogError(err.Error())
+        return ""
+    }
+    bodystr := string(sorbody)
+
+    return bodystr
+}
+
 // Use golang.org/x/text/encoding. Get page body and change it to utf-8
 func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadCloser) string {
     ischange := true
