@@ -4,20 +4,20 @@ import (
     "bytes"
     "github.com/PuerkitoBio/goquery"
     "github.com/bitly/go-simplejson"
-    //iconv "github.com/djimenez/iconv-go"
+    //    iconv "github.com/djimenez/iconv-go"
     "github.com/hu17889/go_spider/core/common/mlog"
     "github.com/hu17889/go_spider/core/common/page"
     "github.com/hu17889/go_spider/core/common/request"
     "github.com/hu17889/go_spider/core/common/util"
-    "golang.org/x/text/encoding/simplifiedchinese"
-    "golang.org/x/text/transform"
+    //    "golang.org/x/text/encoding/simplifiedchinese"
+    //    "golang.org/x/text/transform"
+    "golang.org/x/net/html/charset"
     "io"
     "io/ioutil"
     "net/http"
-    "regexp"
-    //"golang.org/x/net/html"
-    //"fmt"
-    "strings"
+    //    "regexp"
+    //    "golang.org/x/net/html"
+    //    "strings"
 )
 
 // The HttpDownloader download page by package net/http.
@@ -52,6 +52,7 @@ func (this *HttpDownloader) Download(req *request.Request) *page.Page {
     return p
 }
 
+/*
 // The acceptableCharset is test for whether Content-Type is UTF-8 or not
 func (this *HttpDownloader) acceptableCharset(contentTypes []string) bool {
     // each type is like [text/html; charset=UTF-8]
@@ -63,6 +64,7 @@ func (this *HttpDownloader) acceptableCharset(contentTypes []string) bool {
     }
     return false
 }
+
 
 // The getCharset used for parsing the header["Content-Type"] string to get charset of the page.
 func (this *HttpDownloader) getCharset(header http.Header) string {
@@ -83,39 +85,8 @@ func (this *HttpDownloader) getCharset(header http.Header) string {
     return charset
 }
 
-// Charset auto determine. Use golang.org/x/net/html/charset. Get page body and change it to utf-8
-func (this *HttpDownloader) changeCharsetEncodingAuto(charset string, sor io.ReadCloser) string {
-    ischange := true
-    var tr transform.Transformer
-    cs := strings.ToLower(charset)
-    if cs == "gbk" {
-        tr = simplifiedchinese.GBK.NewDecoder()
-    } else if cs == "gb18030" {
-        tr = simplifiedchinese.GB18030.NewDecoder()
-    } else if cs == "hzgb2312" || cs == "gb2312" || cs == "hz-gb2312" {
-        tr = simplifiedchinese.HZGB2312.NewDecoder()
-    } else {
-        ischange = false
-    }
 
-    var destReader io.Reader
-    if ischange {
-        transReader := transform.NewReader(sor, tr)
-        destReader = transReader
-    } else {
-        destReader = sor
-    }
 
-    var sorbody []byte
-    var err error
-    if sorbody, err = ioutil.ReadAll(destReader); err != nil {
-        mlog.LogInst().LogError(err.Error())
-        return ""
-    }
-    bodystr := string(sorbody)
-
-    return bodystr
-}
 
 // Use golang.org/x/text/encoding. Get page body and change it to utf-8
 func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadCloser) string {
@@ -152,7 +123,7 @@ func (this *HttpDownloader) changeCharsetEncoding(charset string, sor io.ReadClo
 }
 
 // Use go-iconv. Get page body and change it to utf-8
-/*
+
 func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadCloser) string {
     var err error
     var converter *iconv.Converter
@@ -187,6 +158,32 @@ func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadClos
 }
 */
 
+// Charset auto determine. Use golang.org/x/net/html/charset. Get page body and change it to utf-8
+func (this *HttpDownloader) changeCharsetEncodingAuto(contentType []string, sor io.ReadCloser) string {
+    var contentTypeStr string
+    for _, v := range contentType {
+        contentTypeStr += v
+    }
+    var err error
+    destReader, err := charset.NewReader(sor, contentTypeStr)
+    if err != nil {
+        mlog.LogInst().LogError(err.Error())
+        destReader = sor
+    }
+
+    var sorbody []byte
+    if sorbody, err = ioutil.ReadAll(destReader); err != nil {
+        mlog.LogInst().LogError(err.Error())
+        // For gb2312, an error will be returned.
+        // Error like: simplifiedchinese: invalid GBK encoding
+        // return ""
+    }
+    //e,name,certain := charset.DetermineEncoding(sorbody,contentTypeStr)
+    bodystr := string(sorbody)
+
+    return bodystr
+}
+
 // Download file and change the charset of page charset.
 func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*page.Page, string) {
     var err error
@@ -207,9 +204,8 @@ func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*p
     p.SetCookies(resp.Cookies())
 
     // get converter to utf-8
-    charset := this.getCharset(resp.Header)
+    bodyStr := this.changeCharsetEncodingAuto(resp.Header["Content-Type"], resp.Body)
 
-    bodyStr := this.changeCharsetEncoding(charset, resp.Body)
     defer resp.Body.Close()
     return p, bodyStr
 }
