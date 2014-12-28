@@ -23,7 +23,7 @@ type Page struct {
     // The body is plain text of crawl result.
     body string
 
-    header  map[string][]string
+    header  http.Header
     cookies []*http.Cookie
 
     // The docParser is a pointer of goquery boject that contains html result.
@@ -46,12 +46,12 @@ func NewPage(req *request.Request) *Page {
 }
 
 // SetHeader save the header of http responce
-func (this *Page) SetHeader(header map[string][]string) {
+func (this *Page) SetHeader(header http.Header) {
     this.header = header
 }
 
 // GetHeader returns the header of http responce
-func (this *Page) GetHeader() map[string][]string {
+func (this *Page) GetHeader() http.Header {
     return this.header
 }
 
