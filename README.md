@@ -39,8 +39,7 @@ Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/g
 go get github.com/hu17889/go_spider
 go get github.com/PuerkitoBio/goquery
 go get github.com/bitly/go-simplejson
-go get golang.org/x/text/transform
-go get golang.org/x/text/encoding/simplifiedchinese
+go get golang.org/x/net/html/charset
 ```
 
 This project is based on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
@@ -84,6 +83,10 @@ If you make a Pipeline module, you can use it by `Spider.AddPipeline(your_pipeli
 
 If you make a Scheduler module, you can use it by `Spider.SetScheduler(your_scheduler)`.
 
+
+## Extensions
+
+Extensions folder include modulers or other tools someone sharing. You can push your code without bugs.
 
 ## Modulers
 
