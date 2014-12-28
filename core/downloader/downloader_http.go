@@ -159,11 +159,7 @@ func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadClos
 */
 
 // Charset auto determine. Use golang.org/x/net/html/charset. Get page body and change it to utf-8
-func (this *HttpDownloader) changeCharsetEncodingAuto(contentType []string, sor io.ReadCloser) string {
-    var contentTypeStr string
-    for _, v := range contentType {
-        contentTypeStr += v
-    }
+func (this *HttpDownloader) changeCharsetEncodingAuto(contentTypeStr string, sor io.ReadCloser) string {
     var err error
     destReader, err := charset.NewReader(sor, contentTypeStr)
     if err != nil {
@@ -204,7 +200,7 @@ func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*p
     p.SetCookies(resp.Cookies())
 
     // get converter to utf-8
-    bodyStr := this.changeCharsetEncodingAuto(resp.Header["Content-Type"], resp.Body)
+    bodyStr := this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
 
     defer resp.Body.Close()
     return p, bodyStr

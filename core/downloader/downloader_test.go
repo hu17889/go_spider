@@ -15,7 +15,7 @@ import (
 )
 
 func TestDownloadHtml(t *testing.T) {
-    //return
+    return
     //request := request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&callback=t13975294&id=23521&pagesize=45&dire=f&dpc=1")
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/l/v/finance/globalnews1/", "html")
@@ -58,7 +58,7 @@ func TestDownloadHtml(t *testing.T) {
 }
 
 func TestDownloadJson(t *testing.T) {
-    //return
+    return
     var req *request.Request
     req = request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
 
