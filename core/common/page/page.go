@@ -113,9 +113,14 @@ func (this *Page) GetRequest() *request.Request {
     return this.req
 }
 
+// GetUrlTag returns name of url.
+func (this *Page) GetUrlTag() string {
+    return this.req.GetUrlTag()
+}
+
 // AddTargetRequest adds one new Request waitting for crawl.
 func (this *Page) AddTargetRequest(url string, respType string) *Page {
-    this.targetRequests = append(this.targetRequests, request.NewRequest(url, respType))
+    this.targetRequests = append(this.targetRequests, request.NewRequest(url, respType, "", "GET", "", nil, nil, nil))
     return this
 }
 
@@ -123,6 +128,26 @@ func (this *Page) AddTargetRequest(url string, respType string) *Page {
 func (this *Page) AddTargetRequests(urls []string, respType string) *Page {
     for _, url := range urls {
         this.AddTargetRequest(url, respType)
+    }
+    return this
+}
+
+// AddTargetRequest adds one new Request waitting for crawl.
+// The respType is "html" or "json" or "jsonp" or "text".
+// The urltag is name for marking url and distinguish different urls in PageProcesser and Pipeline.
+// The method is POST or GET.
+// The postdata is http body string.
+// The header is http header.
+// The cookies is http cookies.
+func (this *Page) AddTargetRequestWithParams(req *request.Request) *Page {
+    this.targetRequests = append(this.targetRequests, req)
+    return this
+}
+
+// AddTargetRequests adds new Requests waitting for crawl.
+func (this *Page) AddTargetRequestsWithParams(reqs []*request.Request) *Page {
+    for _, req := range reqs {
+        this.AddTargetRequestWithParams(req)
     }
     return this
 }

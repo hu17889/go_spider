@@ -15,10 +15,10 @@ import (
 )
 
 func TestDownloadHtml(t *testing.T) {
-    return
+    //return
     //request := request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&callback=t13975294&id=23521&pagesize=45&dire=f&dpc=1")
     var req *request.Request
-    req = request.NewRequest("http://live.sina.com.cn/zt/l/v/finance/globalnews1/", "html")
+    req = request.NewRequest("http://live.sina.com.cn/zt/l/v/finance/globalnews1/", "html", "", "GET", "", nil, nil, nil)
 
     var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
@@ -58,9 +58,9 @@ func TestDownloadHtml(t *testing.T) {
 }
 
 func TestDownloadJson(t *testing.T) {
-    return
+    //return
     var req *request.Request
-    req = request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json")
+    req = request.NewRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id=23521&pagesize=4&dire=f&dpc=1", "json", "", "GET", "", nil, nil, nil)
 
     var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()
@@ -81,7 +81,7 @@ func TestDownloadJson(t *testing.T) {
 func TestCharSetChange(t *testing.T) {
     var req *request.Request
     //req = request.NewRequest("http://stock.finance.sina.com.cn/usstock/api/jsonp.php/t/US_CategoryService.getList?page=1&num=60", "jsonp")
-    req = request.NewRequest("http://soft.chinabyte.com/416/13164916.shtml", "html")
+    req = request.NewRequest("http://soft.chinabyte.com/416/13164916.shtml", "html", "", "GET", "", nil, nil, nil)
 
     var dl downloader.Downloader
     dl = downloader.NewHttpDownloader()

@@ -12,6 +12,7 @@ import (
     "github.com/hu17889/go_spider/core/pipeline"
     "github.com/hu17889/go_spider/core/scheduler"
     "math/rand"
+    //"net/http"
     "time"
     //"fmt"
 )
@@ -71,11 +72,32 @@ func (this *Spider) Taskname() string {
     return this.taskname
 }
 
-// Deal with one url and return the PageItems
+// Deal with one url and return the PageItems.
 func (this *Spider) Get(url string, respType string) *page_items.PageItems {
-    var urls []string
-    urls = append(urls, url)
-    items := this.GetAll(urls, respType)
+    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+    return this.GetByRequest(req)
+}
+
+// Deal with several urls and return the PageItems slice.
+func (this *Spider) GetAll(urls []string, respType string) []*page_items.PageItems {
+    for _, u := range urls {
+        req := request.NewRequest(u, respType, "", "GET", "", nil, nil, nil)
+        this.AddRequest(req)
+    }
+
+    pip := pipeline.NewCollectPipelinePageItems()
+    this.AddPipeline(pip)
+
+    this.Run()
+
+    return pip.GetCollected()
+}
+
+// Deal with one url and return the PageItems with other setting.
+func (this *Spider) GetByRequest(req *request.Request) *page_items.PageItems {
+    var reqs []*request.Request
+    reqs = append(reqs, req)
+    items := this.GetAllByRequest(reqs)
     if len(items) != 0 {
         return items[0]
     }
@@ -83,11 +105,11 @@ func (this *Spider) Get(url string, respType string) *page_items.PageItems {
 }
 
 // Deal with several urls and return the PageItems slice
-func (this *Spider) GetAll(urls []string, respType string) []*page_items.PageItems {
+func (this *Spider) GetAllByRequest(reqs []*request.Request) []*page_items.PageItems {
     // push url
-    for _, u := range urls {
-        req := request.NewRequest(u, respType)
-        this.addRequest(req)
+    for _, req := range reqs {
+        //req := request.NewRequest(u, respType, urltag, method, postdata, header, cookies)
+        this.AddRequest(req)
     }
 
     pip := pipeline.NewCollectPipelinePageItems()
@@ -236,29 +258,38 @@ func (this *Spider) sleep() {
 }
 
 func (this *Spider) AddUrl(url string, respType string) *Spider {
-    req := request.NewRequest(url, respType)
-    this.addRequest(req)
+    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+    this.AddRequest(req)
     return this
 }
 
 func (this *Spider) AddUrls(urls []string, respType string) *Spider {
     for _, url := range urls {
-        req := request.NewRequest(url, respType)
-        this.addRequest(req)
+        req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+        this.AddRequest(req)
     }
     return this
 }
 
 // add Request to Schedule
-func (this *Spider) addRequest(req *request.Request) {
+func (this *Spider) AddRequest(req *request.Request) *Spider {
     if req == nil {
         mlog.LogInst().LogError("request is nil")
-        return
+        return this
     } else if req.GetUrl() == "" {
         mlog.LogInst().LogError("request is empty")
-        return
+        return this
     }
     this.pScheduler.Push(req)
+    return this
+}
+
+//
+func (this *Spider) AddRequests(reqs []*request.Request) *Spider {
+    for _, req := range reqs {
+        this.AddRequest(req)
+    }
+    return this
 }
 
 // core processer
@@ -274,7 +305,7 @@ func (this *Spider) pageProcess(req *request.Request) {
     this.pPageProcesser.Process(p)
     for _, req := range p.GetTargetRequests() {
         //fmt.Printf("%v\n",req)
-        this.addRequest(req)
+        this.AddRequest(req)
     }
 
     // output

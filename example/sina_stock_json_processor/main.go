@@ -1,4 +1,4 @@
-// The example gets stock newses from site sina.com.
+// The example gets stock newses from site sina.com (http://live.sina.com.cn/zt/f/v/finance/globalnews1).
 // The spider is continuous service.
 // The stock api returns json result.
 // It fetchs news at regular intervals that has been set in the config file.

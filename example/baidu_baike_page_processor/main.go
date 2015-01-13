@@ -4,6 +4,7 @@ package main
 import (
     "fmt"
     "github.com/hu17889/go_spider/core/common/page"
+    "github.com/hu17889/go_spider/core/common/request"
     "github.com/hu17889/go_spider/core/spider"
     "strings"
 )
@@ -41,7 +42,17 @@ func main() {
     //  PageProcesser ;
     //  task name used in Pipeline for record;
     sp := spider.NewSpider(NewMyPageProcesser(), "TaskName")
-    pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html") // url, html is the responce type ("html" or "json" or "jsonp" or "text")
+    // GetWithParams Params:
+    //  1. Url.
+    //  2. Responce type is "html" or "json" or "jsonp" or "text".
+    //  3. The urltag is name for marking url and distinguish different urls in PageProcesser and Pipeline.
+    //  4. The method is POST or GET.
+    //  5. The postdata is body string sent to sever.
+    //  6. The header is header for http request.
+    //  7. Cookies
+    req := request.NewRequest("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html", "", "GET", "", nil, nil, nil)
+    pageItems := sp.GetByRequest(req)
+    //pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html")
 
     url := pageItems.GetRequest().GetUrl()
     println("-----------------------------------spider.Get---------------------------------")
@@ -55,7 +66,13 @@ func main() {
         "http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn",
         "http://baike.baidu.com/view/383720.htm?fromtitle=html&fromid=97049&type=syn",
     }
-    pageItemsArr := sp.SetThreadnum(2).GetAll(urls, "html")
+    var reqs []*request.Request
+    for _, url := range urls {
+        req := request.NewRequest(url, "html", "", "GET", "", nil, nil, nil)
+        reqs = append(reqs, req)
+    }
+    pageItemsArr := sp.SetThreadnum(2).GetAllByRequest(reqs)
+    //pageItemsArr := sp.SetThreadnum(2).GetAll(urls, "html")
     for _, item := range pageItemsArr {
         url = item.GetRequest().GetUrl()
         println("url\t:\t" + url)

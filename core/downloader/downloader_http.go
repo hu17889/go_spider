@@ -15,9 +15,11 @@ import (
     "io"
     "io/ioutil"
     "net/http"
+    "net/url"
     //    "regexp"
     //    "golang.org/x/net/html"
-    //    "strings"
+    "strings"
+    //"fmt"
 )
 
 // The HttpDownloader download page by package net/http.
@@ -183,19 +185,37 @@ func (this *HttpDownloader) changeCharsetEncodingAuto(contentTypeStr string, sor
 // Download file and change the charset of page charset.
 func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*page.Page, string) {
     var err error
-    var url string
-    if url = req.GetUrl(); len(url) == 0 {
+    var urlstr string
+    if urlstr = req.GetUrl(); len(urlstr) == 0 {
         mlog.LogInst().LogError("url is empty")
         p.SetStatus(true, "url is empty")
         return p, ""
     }
 
-    var resp *http.Response
-    if resp, err = http.Get(url); err != nil {
-        mlog.LogInst().LogError(err.Error())
-        p.SetStatus(true, err.Error())
-        return p, ""
+    client := &http.Client{
+        CheckRedirect: req.GetRedirectFunc(),
     }
+    httpreq, err := http.NewRequest(req.GetMethod(), req.GetUrl(), strings.NewReader(req.GetPostdata()))
+    if header := req.GetHeader(); header != nil {
+        httpreq.Header = req.GetHeader()
+    }
+    if cookies := req.GetCookies(); cookies != nil {
+        for i := range cookies {
+            httpreq.AddCookie(cookies[i])
+        }
+    }
+
+    var resp *http.Response
+    if resp, err = client.Do(httpreq); err != nil {
+        if e, ok := err.(*url.Error); ok && e.Err != nil && e.Err.Error() == "normal" {
+            //  normal
+        } else {
+            mlog.LogInst().LogError(err.Error())
+            p.SetStatus(true, err.Error())
+            return p, ""
+        }
+    }
+
     p.SetHeader(resp.Header)
     p.SetCookies(resp.Cookies())
 
