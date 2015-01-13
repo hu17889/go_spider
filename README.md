@@ -97,6 +97,7 @@ Extensions folder include modulers or other tools someone sharing. You can push 
 **Functions:** 
 
 - Clawler startup functions: Get, GetAll, Run
+- Add request: AddUrl, AddUrls, AddRequest, AddRequests
 - Set main moduler: AddPipeline(could have several pipeline modulers), SetScheduler, SetDownloader
 - Set config: SetExitWhenComplete, SetThreadnum(concurrent number), SetSleepTime(sleep time after one crawl)
 - Monitor: OpenFileLog, OpenFileLogDefault(open file log function, logged by **mlog** package), CloseFileLog, OpenStrace(open tracing info printed on screen by stderr), CloseStrace
@@ -128,7 +129,7 @@ These key-value pairs will be saved in PageItems and urls will be pushed in Sche
 - Get result: GetJson, GetHtmlParser, GetBodyStr(plain text)
 - Get information of objective: GetRequest, GetCookies, GetHeader
 - Get Status of crawl process: IsSucc(Download success or not), Errormsg(Get error info in Downloader)
-- Set config:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddField(Save key-value pairs after parsing)
+- Set config:SetSkip, GetSkip(if skip is true, do not output result in Pipeline), AddTargetRequest, AddTargetRequests(Save urls to be crawled next stage), AddTargetRequestWithParams, AddTargetRequestsWithParams, AddField(Save key-value pairs after parsing)
 
 
 ### Scheduler
@@ -148,6 +149,16 @@ These key-value pairs will be saved in PageItems and urls will be pushed in Sche
 **Functions:**
 
 - Process
+
+
+### Request
+
+**Summary:** The Request moduler has config for http request like url, header and cookies.
+
+**Functions:**
+
+- Process
+
 
 
 ## License
