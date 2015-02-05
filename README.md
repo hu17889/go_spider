@@ -9,7 +9,7 @@ A crawler of vertical communities achieved by GOLANG.
 ![image](https://raw.githubusercontent.com/hu17889/doc/master/go_spider/img/logo.png)
 
 
-Latest stable Release: [Version 1.0 (Sep 23, 2014)](https://github.com/hu17889/go_spider/releases).
+Latest stable Release: [Version 1.2 (Sep 23, 2014)](https://github.com/hu17889/go_spider/releases).
 
 
 * [![go_spider讨论群](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=29f4d06e7fa2b401bc231274d08ada879db777bbf955a44c0e598aaf3d574963) QQ群号：337344607
