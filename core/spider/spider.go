@@ -204,6 +204,7 @@ func (this *Spider) GetExitWhenComplete() bool {
 // If log is opened, error info or other useful info in spider will be logged in file of the filepath.
 // Log command is mlog.LogInst().LogError("info") or mlog.LogInst().LogInfo("info").
 // Spider's default log is closed.
+// The filepath is absolute path.
 func (this *Spider) OpenFileLog(filePath string) *Spider {
     mlog.InitFilelog(true, filePath)
     return this
