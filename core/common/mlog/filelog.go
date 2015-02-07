@@ -3,6 +3,8 @@ package mlog
 import (
     "log"
     "os"
+    "os/exec"
+    "path/filepath"
     "strconv"
     "time"
 )
@@ -28,15 +30,24 @@ func LogInst() *filelog {
 }
 
 // The InitFilelog is init the flog.
-func InitFilelog(isopen bool, filepath string) {
-    if filepath == "" {
+func InitFilelog(isopen bool, fp string) {
+    if !isopen {
+        return
+    }
+    if fp == "" {
         wd := os.Getenv("GOPATH")
         if wd == "" {
-            panic("GOPATH is not setted in env.")
+            //panic("GOPATH is not setted in env.")
+            file, _ := exec.LookPath(os.Args[0])
+            path := filepath.Dir(file)
+            wd = path
         }
-        filepath = wd + "/log/"
+        if wd == "" {
+            panic("GOPATH is not setted in env or can not get exe path.")
+        }
+        fp = wd + "/log/"
     }
-    flog = newFilelog(isopen, filepath)
+    flog = newFilelog(isopen, fp)
 }
 
 // The newFilelog returns initialized filelog object.

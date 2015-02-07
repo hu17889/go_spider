@@ -21,9 +21,6 @@ func NewMyPageProcesser() *MyPageProcesser {
     return &MyPageProcesser{}
 }
 
-func (this *MyPageProcesser) login(name string, pwd string) {
-}
-
 // Parse html dom here and record the parse result that we want to Page.
 // Package goquery (http://godoc.org/github.com/PuerkitoBio/goquery) is used to parse html.
 func (this *MyPageProcesser) Process(p *page.Page) {
@@ -111,7 +108,7 @@ func main() {
     // Spider input:
     //  PageProcesser ;
     //  Task name used in Pipeline for record;
-    // AddUrlWithParams Params:
+    // AddRequest Params:
     //  1. Url.
     //  2. Responce type is "html" or "json" or "jsonp" or "text".
     //  3. The urltag is name for marking url and distinguish different urls in PageProcesser and Pipeline.
