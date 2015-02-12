@@ -297,11 +297,18 @@ func (this *Spider) AddRequests(reqs []*request.Request) *Spider {
 // core processer
 func (this *Spider) pageProcess(req *request.Request) {
     var p *page.Page
-    p = this.pDownloader.Download(req)
-    if !p.IsSucc() {
-        // download retry
+
+    // download page
+    for i := 0; i < 3; i++ {
         this.sleep()
         p = this.pDownloader.Download(req)
+        if p.IsSucc() { // if fail retry 3 times
+            break
+        }
+    }
+
+    if !p.IsSucc() { // if fail do not need process
+        return
     }
 
     this.pPageProcesser.Process(p)
@@ -316,6 +323,4 @@ func (this *Spider) pageProcess(req *request.Request) {
             pip.Process(p.GetPageItems(), this)
         }
     }
-
-    this.sleep()
 }
