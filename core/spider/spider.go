@@ -298,6 +298,16 @@ func (this *Spider) AddRequests(reqs []*request.Request) *Spider {
 func (this *Spider) pageProcess(req *request.Request) {
     var p *page.Page
 
+    defer func() {
+        if err := recover(); err != nil { // do not affect other
+            if strerr, ok := err.(string); ok {
+                mlog.LogInst().LogError(strerr)
+            } else {
+                mlog.LogInst().LogError("pageProcess error")
+            }
+        }
+    }()
+
     // download page
     for i := 0; i < 3; i++ {
         this.sleep()
