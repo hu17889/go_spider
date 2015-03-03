@@ -32,6 +32,8 @@ type Request struct {
     // method returns both the previous Response.
     // If CheckRedirect returns error.New("normal"), the error process after client.Do will ignore the error.
     checkRedirect func(req *http.Request, via []*http.Request) error
+
+    extension interface{}
 }
 
 // NewRequest returns initialized Request object.
@@ -42,8 +44,11 @@ func NewRequestSimple(url string, respType string, urltag string) *Request {
 }
 */
 
-func NewRequest(url string, respType string, urltag string, method string, postdata string, header http.Header, cookies []*http.Cookie, checkRedirect func(req *http.Request, via []*http.Request) error) *Request {
-    return &Request{url, respType, method, postdata, urltag, header, cookies, checkRedirect}
+func NewRequest(url string, respType string, urltag string, method string,
+    postdata string, header http.Header, cookies []*http.Cookie,
+    checkRedirect func(req *http.Request, via []*http.Request) error,
+    extension interface{}) *Request {
+    return &Request{url, respType, method, postdata, urltag, header, cookies, checkRedirect, extension}
 }
 
 func (this *Request) GetUrl() string {
@@ -76,4 +81,8 @@ func (this *Request) GetResponceType() string {
 
 func (this *Request) GetRedirectFunc() func(req *http.Request, via []*http.Request) error {
     return this.checkRedirect
+}
+
+func (this *Request) GetExtension() interface{} {
+    return this.extension
 }
