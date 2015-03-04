@@ -83,6 +83,6 @@ func (this *Request) GetRedirectFunc() func(req *http.Request, via []*http.Reque
     return this.checkRedirect
 }
 
-func (this *Request) GetExtension() interface{} {
-    return this.extension
+func (this *Request) GetMeta() interface{} {
+    return this.meta
 }

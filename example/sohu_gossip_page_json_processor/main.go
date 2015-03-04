@@ -76,9 +76,9 @@ func (this MyPageProcesser) Process(p *page.Page) {
         jsonMap := ChangyanJson{}
         err := json.NewDecoder(strings.NewReader(p.GetBodyStr())).Decode(&jsonMap)
         if err == nil {
-            content, ok := p.GetRequest().GetExtension().(string)
+            content, ok := p.GetRequest().GetMeta().(string)
             if ok {
-                fmt.Println("Title:", content, " ComentCount:", jsonMap.ListData.OuterCmtSum, " ParticipationCount:", jsonMap.ListData.ParticipationSum)
+                fmt.Println("Title:", content, " CommentCount:", jsonMap.ListData.OuterCmtSum, " ParticipationCount:", jsonMap.ListData.ParticipationSum)
             }
         }
     }
