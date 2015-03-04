@@ -50,7 +50,7 @@ func main() {
     //  5. The postdata is body string sent to sever.
     //  6. The header is header for http request.
     //  7. Cookies
-    req := request.NewRequest("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html", "", "GET", "", nil, nil, nil)
+    req := request.NewRequest("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html", "", "GET", "", nil, nil, nil, nil)
     pageItems := sp.GetByRequest(req)
     //pageItems := sp.Get("http://baike.baidu.com/view/1628025.htm?fromtitle=http&fromid=243074&type=syn", "html")
 
@@ -68,7 +68,7 @@ func main() {
     }
     var reqs []*request.Request
     for _, url := range urls {
-        req := request.NewRequest(url, "html", "", "GET", "", nil, nil, nil)
+        req := request.NewRequest(url, "html", "", "GET", "", nil, nil, nil, nil)
         reqs = append(reqs, req)
     }
     pageItemsArr := sp.SetThreadnum(2).GetAllByRequest(reqs)

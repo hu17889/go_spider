@@ -39,7 +39,7 @@ func (this *MyPageProcesser) Process(p *page.Page) {
         //  8. Http redirect function
         if len(this.cookies) != 0 {
             p.AddField("info", "get cookies success")
-            req := request.NewRequest("http://backadmin.hucong.net/site/index", "html", "site_index", "GET", "", nil, this.cookies, nil)
+            req := request.NewRequest("http://backadmin.hucong.net/site/index", "html", "site_index", "GET", "", nil, this.cookies, nil, nil)
             p.AddTargetRequestWithParams(req)
         } else {
             p.AddField("info", "get cookies failed")
@@ -117,7 +117,7 @@ func main() {
     //  6. The header is header for http request.
     //  7. Cookies
     //  8. Http redirect function
-    req := request.NewRequest("http://backadmin.hucong.net/main/user/login", "html", "site_login", "POST", post_arg.Encode(), header, nil, myRedirect)
+    req := request.NewRequest("http://backadmin.hucong.net/main/user/login", "html", "site_login", "POST", post_arg.Encode(), header, nil, myRedirect, nil)
 
     spider.NewSpider(NewMyPageProcesser(), "TaskName").
         AddRequest(req).

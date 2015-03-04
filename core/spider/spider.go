@@ -74,14 +74,14 @@ func (this *Spider) Taskname() string {
 
 // Deal with one url and return the PageItems.
 func (this *Spider) Get(url string, respType string) *page_items.PageItems {
-    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
     return this.GetByRequest(req)
 }
 
 // Deal with several urls and return the PageItems slice.
 func (this *Spider) GetAll(urls []string, respType string) []*page_items.PageItems {
     for _, u := range urls {
-        req := request.NewRequest(u, respType, "", "GET", "", nil, nil, nil)
+        req := request.NewRequest(u, respType, "", "GET", "", nil, nil, nil, nil)
         this.AddRequest(req)
     }
 
@@ -260,14 +260,14 @@ func (this *Spider) sleep() {
 }
 
 func (this *Spider) AddUrl(url string, respType string) *Spider {
-    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
     this.AddRequest(req)
     return this
 }
 
 func (this *Spider) AddUrls(urls []string, respType string) *Spider {
     for _, url := range urls {
-        req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil)
+        req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
         this.AddRequest(req)
     }
     return this
