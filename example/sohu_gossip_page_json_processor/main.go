@@ -1,4 +1,4 @@
-// example for request extension
+// example for request meta
 
 package main
 
@@ -18,11 +18,11 @@ const (
     wkSohuUrl       = "http://yule.sohu.com/gossip/index.shtml"
     wkSohuYule      = `http://changyan.sohu.com/node/html?appid=cyqemw6s1&client_id=cyqemw6s1&topicsid=%s&spSize=5`
     wkSohuPic       = `http://changyan.sohu.com/node/html?appid=cyqemw6s1&client_id=cyqemw6s1&topicsid=9000%s&spSize=5`
-    maxWKSouhuLayer = 3 // 最多抓取多少页
+    maxWKSouhuLayer = 3 // max grab page
 )
 
-var rxYule = regexp.MustCompile(`^http://yule\.sohu\.com/.*?/n(.*?).shtml`)      // 筛选出娱乐版块
-var rxPic = regexp.MustCompile(`^http://pic\.yule\.sohu\.com/group-(.*?).shtml`) // 筛选出图片版块；八卦版块混合了这两个
+var rxYule = regexp.MustCompile(`^http://yule\.sohu\.com/.*?/n(.*?).shtml`)      // gossip section
+var rxPic = regexp.MustCompile(`^http://pic\.yule\.sohu\.com/group-(.*?).shtml`) // picture section
 
 type MyPageProcesser struct {
 }
@@ -78,7 +78,7 @@ func (this MyPageProcesser) Process(p *page.Page) {
         if err == nil {
             content, ok := p.GetRequest().GetExtension().(string)
             if ok {
-                fmt.Println("标题:", content, " 评论数:", jsonMap.ListData.OuterCmtSum, " 参与数:", jsonMap.ListData.ParticipationSum)
+                fmt.Println("Title:", content, " ComentCount:", jsonMap.ListData.OuterCmtSum, " ParticipationCount:", jsonMap.ListData.ParticipationSum)
             }
         }
     }
@@ -92,7 +92,7 @@ func main() {
         SetThreadnum(2)
 
     for i := 1; i < maxWKSouhuLayer; i++ {
-        url := fmt.Sprintf("http://yule.sohu.com/gossip/index_%d.shtml", 5301-i) // 一个神奇的数字，
+        url := fmt.Sprintf("http://yule.sohu.com/gossip/index_%d.shtml", 5301-i) // magic num
         req := request.NewRequest(url, "html", "index", "GET", "", nil, nil, nil, nil)
         sohuSpider.AddRequest(req)
     }
