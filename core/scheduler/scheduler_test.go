@@ -14,7 +14,7 @@ import (
 
 func TestQueueScheduler(t *testing.T) {
     var r *request.Request
-    r = request.NewRequest("http://baidu.com", "html", "", "GET", "", nil, nil, nil)
+    r = request.NewRequest("http://baidu.com", "html", "", "GET", "", nil, nil, nil, nil)
     fmt.Printf("%v\n", r)
 
     var s *scheduler.QueueScheduler
@@ -37,7 +37,7 @@ func TestQueueScheduler(t *testing.T) {
     // remove duplicate
     s = scheduler.NewQueueScheduler(true)
 
-    r2 := request.NewRequest("http://qq.com", "html", "", "GET", "", nil, nil, nil)
+    r2 := request.NewRequest("http://qq.com", "html", "", "GET", "", nil, nil, nil, nil)
     s.Push(r)
     s.Push(r2)
     s.Push(r)
