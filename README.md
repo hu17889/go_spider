@@ -44,6 +44,7 @@ go get golang.org/x/net/html/charset
 
 This project is based on [simplejson](https://github.com/bitly/go-simplejson/blob/master/simplejson.go), [goquery](https://github.com/PuerkitoBio/goquery).
 
+You can download packages from [http://gopm.io/](http://gopm.io/) in China.
 
 ## Use example
 
