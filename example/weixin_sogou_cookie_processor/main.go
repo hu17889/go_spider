@@ -49,7 +49,7 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 	if next_page_href == "" {
 		p.SetSkip(true)
 	} else {
-		//p.AddTargetRequestWithHeaderFile("http://weixin.sogou.com/weixin"+href, "html", "weixin.sogou.com.json")
+		p.AddTargetRequestWithHeaderFile("http://weixin.sogou.com/weixin"+next_page_href, "html", "weixin.sogou.com.json")
 	}
 
 }
