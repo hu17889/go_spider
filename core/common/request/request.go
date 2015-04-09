@@ -2,7 +2,12 @@
 package request
 
 import (
-    "net/http"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"simplejson"
+
+	"github.com/hu17889/go_spider/core/common/mlog"
 )
 
 // Request represents object waiting for being crawled.
@@ -49,6 +54,29 @@ func NewRequest(url string, respType string, urltag string, method string,
     checkRedirect func(req *http.Request, via []*http.Request) error,
     meta interface{}) *Request {
     return &Request{url, respType, method, postdata, urltag, header, cookies, checkRedirect, meta}
+}
+
+func NewRequestWithHeaderFile(url string, respType string, headerFile string) *Request {
+	_, err := os.Stat(headerFile)
+	if err != nil {
+		//file is not exist , using default mode
+		return NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
+	}
+	//read file , parse the header and cookies
+	b, err := ioutil.ReadFile(headerFile)
+	if err != nil {
+		//make be:  share access error
+		mlog.LogInst().LogError(err.Error())
+	}
+	js, _ := simplejson.NewJson(b)
+	//constructed to header
+
+	h := make(http.Header)
+	h.Add("User-Agent", js.Get("User-Agent").MustString())
+	h.Add("Cookie", js.Get("Cookie").MustString())
+	h.Add("Cache-Control", "max-age=0")
+	h.Add("Connection", "keep-alive")
+	return NewRequest(url, respType, "", "GET", "", h, nil, nil, nil)
 }
 
 func (this *Request) GetUrl() string {
