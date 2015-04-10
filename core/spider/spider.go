@@ -125,6 +125,8 @@ func (this *Spider) Run() {
         this.threadnum = 1
     }
     this.mc = resource_manage.NewResourceManageChan(this.threadnum)
+	
+	//init db  by sorawa
 
     for {
         req := this.pScheduler.Poll()
@@ -141,7 +143,7 @@ func (this *Spider) Run() {
         this.mc.GetOne()
 
         // Asynchronous fetching
-        go func(*request.Request) {
+        go func(req *request.Request) {
             defer this.mc.FreeOne()
             //time.Sleep( time.Duration(rand.Intn(5)) * time.Second)
             mlog.StraceInst().Println("start crawl : " + req.GetUrl())
@@ -265,6 +267,12 @@ func (this *Spider) AddUrl(url string, respType string) *Spider {
     return this
 }
 
+func (this *Spider) AddUrlWithHeaderFile(url string, respType string,header_file string) *Spider {
+    req := request.NewRequestWithHeaderFile(url, respType, header_file)
+    this.AddRequest(req)
+    return this
+}
+
 func (this *Spider) AddUrls(urls []string, respType string) *Spider {
     for _, url := range urls {
         req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
@@ -315,15 +323,15 @@ func (this *Spider) pageProcess(req *request.Request) {
         if p.IsSucc() { // if fail retry 3 times
             break
         }
+		
     }
-
+	
     if !p.IsSucc() { // if fail do not need process
         return
     }
 
     this.pPageProcesser.Process(p)
     for _, req := range p.GetTargetRequests() {
-        //fmt.Printf("%v\n",req)
         this.AddRequest(req)
     }
 
