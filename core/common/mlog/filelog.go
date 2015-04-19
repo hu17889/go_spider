@@ -65,7 +65,7 @@ func newFilelog(isopen bool, logpath string) *filelog {
 
     f, err := os.OpenFile(logpath+"/"+filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
     if err != nil {
-        panic("log file open error : " + logpath +"/"+ filename + "\n")
+        panic("log file open error : " + logpath + "/" + filename + "\n")
     }
 
     pfilelog := &filelog{}
