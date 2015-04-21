@@ -4,7 +4,6 @@ package page
 
 import (
 	"net/http"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bitly/go-simplejson"
 	"github.com/hu17889/go_spider/core/common/page_items"
