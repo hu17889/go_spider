@@ -267,11 +267,18 @@ func (this *Spider) AddUrl(url string, respType string) *Spider {
     return this
 }
 
-func (this *Spider) AddUrlWithHeaderFile(url string, respType string,header_file string) *Spider {
-    req := request.NewRequestWithHeaderFile(url, respType, header_file)
+func (this *Spider) AddUrlEx(url string, respType string,headerFile string,proxyHost string) *Spider {
+    req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
+    this.AddRequest(req.AddHeaderFile(headerFile).AddProxyHost(proxyHost))
+    return this
+}
+
+func (this *Spider) AddUrlWithHeaderFile(url string, respType string,headerFile string) *Spider {
+    req := request.NewRequestWithHeaderFile(url, respType, headerFile)
     this.AddRequest(req)
     return this
 }
+
 
 func (this *Spider) AddUrls(urls []string, respType string) *Spider {
     for _, url := range urls {
@@ -280,6 +287,23 @@ func (this *Spider) AddUrls(urls []string, respType string) *Spider {
     }
     return this
 }
+
+func (this *Spider) AddUrlsWithHeaderFile(urls []string, respType string,headerFile string) *Spider {
+	for _, url := range urls {
+		req := request.NewRequestWithHeaderFile(url, respType, headerFile)
+		this.AddRequest(req)
+	}
+    return this
+}
+
+func (this *Spider) AddUrlsEx(urls []string, respType string,headerFile string,proxyHost string) *Spider {
+	for _, url := range urls {
+		req := request.NewRequest(url, respType, "", "GET", "", nil, nil, nil, nil)
+		this.AddRequest(req.AddHeaderFile(headerFile).AddProxyHost(proxyHost))
+	}
+    return this
+}
+
 
 // add Request to Schedule
 func (this *Spider) AddRequest(req *request.Request) *Spider {
