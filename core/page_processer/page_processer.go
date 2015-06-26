@@ -11,4 +11,5 @@ import (
 
 type PageProcesser interface {
     Process(p *page.Page)
+    Finish()
 }
