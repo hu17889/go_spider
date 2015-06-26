@@ -84,6 +84,10 @@ func (this MyPageProcesser) Process(p *page.Page) {
     }
 }
 
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
+}
+
 func main() {
     req := request.NewRequest(wkSohuUrl, "html", "index", "GET", "", nil, nil, nil, nil)
     sohuSpider := spider.NewSpider(NewMyPageProcesser(), "Sohu").
