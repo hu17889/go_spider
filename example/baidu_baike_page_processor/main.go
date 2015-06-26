@@ -37,6 +37,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
     p.AddField("summary", summary)
 }
 
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
+}
+
 func main() {
     // spider input:
     //  PageProcesser ;
