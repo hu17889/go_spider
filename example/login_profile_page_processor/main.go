@@ -87,6 +87,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
     //p.AddField("readme", readme)
 }
 
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
+}
+
 // function that prevent redirect for getting cookies
 // If CheckRedirect function returns error.New("normal"), the error process after client.Do will ignore the error.
 func myRedirect(req *http.Request, via []*http.Request) error {
