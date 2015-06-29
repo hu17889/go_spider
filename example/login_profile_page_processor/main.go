@@ -9,7 +9,7 @@ import (
     "net/http"
     "net/url"
     "strings"
-    // "fmt"
+    "fmt"
     "errors"
 )
 
@@ -85,6 +85,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
     p.AddField("author", name)
     p.AddField("project", repository)
     //p.AddField("readme", readme)
+}
+
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
 }
 
 // function that prevent redirect for getting cookies

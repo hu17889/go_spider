@@ -9,7 +9,7 @@ import (
     "github.com/hu17889/go_spider/core/common/page"
     "github.com/hu17889/go_spider/core/pipeline"
     "github.com/hu17889/go_spider/core/spider"
-    //"fmt"
+    "fmt"
     "log"
     "strconv"
 )
@@ -80,6 +80,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
     p.AddTargetRequest("http://live.sina.com.cn/zt/api/l/get/finance/globalnews1/index.htm?format=json&id="+nextidstr+"&pagesize=10&dire=f", "json")
     //println(p.GetTargetRequests())
 
+}
+
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
 }
 
 func main() {

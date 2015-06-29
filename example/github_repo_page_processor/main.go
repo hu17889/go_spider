@@ -15,6 +15,7 @@ import (
     "github.com/hu17889/go_spider/core/pipeline"
     "github.com/hu17889/go_spider/core/spider"
     "strings"
+    "fmt"
 )
 
 type MyPageProcesser struct {
@@ -53,6 +54,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
     p.AddField("author", name)
     p.AddField("project", repository)
     //p.AddField("readme", readme)
+}
+
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
 }
 
 func main() {

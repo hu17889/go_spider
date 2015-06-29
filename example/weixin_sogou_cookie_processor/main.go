@@ -54,6 +54,10 @@ func (this *MyPageProcesser) Process(p *page.Page) {
 
 }
 
+func (this *MyPageProcesser) Finish() {
+    fmt.Printf("TODO:before end spider \r\n")
+}
+
 func main() {
 	// Spider input:
 	//  PageProcesser ;
