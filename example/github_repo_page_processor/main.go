@@ -15,6 +15,7 @@ import (
     "github.com/hu17889/go_spider/core/pipeline"
     "github.com/hu17889/go_spider/core/spider"
     "strings"
+    "fmt"
 )
 
 type MyPageProcesser struct {
