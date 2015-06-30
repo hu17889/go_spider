@@ -133,6 +133,8 @@ func (this *Spider) Run() {
 
         // mc is not atomic
         if this.mc.Has() == 0 && req == nil && this.exitWhenComplete {
+	    mlog.StraceInst().Println("** executed callback **")
+	    this.pPageProcesser.Finish()
             mlog.StraceInst().Println("** end spider **")
             break
         } else if req == nil {
