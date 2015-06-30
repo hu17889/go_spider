@@ -22,7 +22,7 @@ type PageItems struct {
 // NewPageItems returns initialized PageItems object.
 func NewPageItems(req *request.Request) *PageItems {
     items := make(map[string]string)
-    return &PageItems{req: req, items: items}
+    return &PageItems{req: req, items: items, skip: false}
 }
 
 // GetRequest returns request of PageItems
