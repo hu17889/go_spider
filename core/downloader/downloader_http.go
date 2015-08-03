@@ -21,6 +21,7 @@ import (
     //    "regexp"
     //    "golang.org/x/net/html"
     "strings"
+	"compress/gzip"
 )
 
 // The HttpDownloader download page by package net/http.
@@ -184,6 +185,33 @@ func (this *HttpDownloader) changeCharsetEncodingAuto(contentTypeStr string, sor
     return bodystr
 }
 
+func (this *HttpDownloader) changeCharsetEncodingAutoGzipSupport(contentTypeStr string, sor io.ReadCloser) string {
+	var err error
+	gzipReader, err := gzip.NewReader(sor)
+	if err != nil {
+		mlog.LogInst().LogError(err.Error())
+		return ""
+	}
+	destReader, err := charset.NewReader(gzipReader, contentTypeStr)
+
+	if err != nil {
+		mlog.LogInst().LogError(err.Error())
+		destReader = sor
+	}
+
+	var sorbody []byte
+	if sorbody, err = ioutil.ReadAll(destReader); err != nil {
+		mlog.LogInst().LogError(err.Error())
+		// For gb2312, an error will be returned.
+		// Error like: simplifiedchinese: invalid GBK encoding
+		// return ""
+	}
+	//e,name,certain := charset.DetermineEncoding(sorbody,contentTypeStr)
+	bodystr := string(sorbody)
+
+	return bodystr
+}
+
 // choose http GET/method to download
 func connectByHttp(p *page.Page, req *request.Request) (*http.Response, error) {
     client := &http.Client{
@@ -269,7 +297,12 @@ func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*p
     p.SetCookies(resp.Cookies())
 
     // get converter to utf-8
-    bodyStr := this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
+	var bodyStr string
+	if resp.Header.Get("Content-Encoding") == "gzip" {
+		bodyStr = this.changeCharsetEncodingAutoGzipSupport(resp.Header.Get("Content-Type"), resp.Body)
+	} else {
+		bodyStr = this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
+	}
     //fmt.Printf("utf-8 body %v \r\n", bodyStr)
     defer resp.Body.Close()
     return p, bodyStr
