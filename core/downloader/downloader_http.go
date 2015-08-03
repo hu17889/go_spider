@@ -188,11 +188,11 @@ func (this *HttpDownloader) changeCharsetEncodingAuto(contentTypeStr string, sor
 func (this *HttpDownloader) changeCharsetEncodingAutoGzipSupport(contentTypeStr string, sor io.ReadCloser) string {
 	var err error
 	gzipReader, err := gzip.NewReader(sor)
-	defer gzipReader.Close()
 	if err != nil {
 		mlog.LogInst().LogError(err.Error())
 		return ""
 	}
+	defer gzipReader.Close()
 	destReader, err := charset.NewReader(gzipReader, contentTypeStr)
 
 	if err != nil {
