@@ -109,6 +109,7 @@ func (this *RedisScheduler) Poll() *request.Request {
     conn := this.redisPool.Get()
     defer conn.Close()
 
+	
     length, err := this.count()
     if err != nil {
         return nil
