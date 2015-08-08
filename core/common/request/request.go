@@ -101,9 +101,9 @@ func readHeaderFromFile(headerFile string) http.Header {
 //point to a json file
 /* xxx.json
 {
-    "User-Agent":"curl/7.19.3 (i386-pc-win32) libcurl/7.19.3 OpenSSL/1.0.0d",
-    "Referer":"http://weixin.sogou.com/gzh?openid=oIWsFt6Sb7aZmuI98AU7IXlbjJps",
-    "Cookie":""
+	"User-Agent":"curl/7.19.3 (i386-pc-win32) libcurl/7.19.3 OpenSSL/1.0.0d",
+	"Referer":"http://weixin.sogou.com/gzh?openid=oIWsFt6Sb7aZmuI98AU7IXlbjJps",
+	"Cookie":""
 }
 */
 func (this *Request) AddHeaderFile(headerFile string) *Request {
