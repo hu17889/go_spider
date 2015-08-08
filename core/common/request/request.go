@@ -12,28 +12,28 @@ import (
 
 // Request represents object waiting for being crawled.
 type Request struct {
-    url string
+    Url string
 
     // Responce type: html json jsonp text
-    respType string
+    RespType string
 
     // GET POST
-    method string
+    Method string
 
     // POST data
-    postdata string
+    Postdata string
 
     // name for marking url and distinguish different urls in PageProcesser and Pipeline
-    urltag string
+    Urltag string
 
     // http header
-    header http.Header
+    Header http.Header
 
     // http cookies
-    cookies []*http.Cookie
+    Cookies []*http.Cookie
 
     //proxy host   example='localhost:80'
-    proxyHost string
+    ProxyHost string
 
     // Redirect function for downloader used in http.Client
     // If CheckRedirect returns an error, the Client's Get
@@ -41,7 +41,7 @@ type Request struct {
     // If CheckRedirect returns error.New("normal"), the error process after client.Do will ignore the error.
     checkRedirect func(req *http.Request, via []*http.Request) error
 
-    meta interface{}
+    Meta interface{}
 }
 
 // NewRequest returns initialized Request object.
@@ -112,46 +112,46 @@ func (this *Request) AddHeaderFile(headerFile string) *Request {
         return this
     }
     h := readHeaderFromFile(headerFile)
-    this.header = h
+    this.Header = h
     return this
 }
 
 // @host  http://localhost:8765/
 func (this *Request) AddProxyHost(host string) *Request {
-    this.proxyHost = host
+    this.ProxyHost = host
     return this
 }
 
 func (this *Request) GetUrl() string {
-    return this.url
+    return this.Url
 }
 
 func (this *Request) GetUrlTag() string {
-    return this.urltag
+    return this.Urltag
 }
 
 func (this *Request) GetMethod() string {
-    return this.method
+    return this.Method
 }
 
 func (this *Request) GetPostdata() string {
-    return this.postdata
+    return this.Postdata
 }
 
 func (this *Request) GetHeader() http.Header {
-    return this.header
+    return this.Header
 }
 
 func (this *Request) GetCookies() []*http.Cookie {
-    return this.cookies
+    return this.Cookies
 }
 
 func (this *Request) GetProxyHost() string {
-    return this.proxyHost
+    return this.ProxyHost
 }
 
 func (this *Request) GetResponceType() string {
-    return this.respType
+    return this.RespType
 }
 
 func (this *Request) GetRedirectFunc() func(req *http.Request, via []*http.Request) error {
@@ -159,5 +159,5 @@ func (this *Request) GetRedirectFunc() func(req *http.Request, via []*http.Reque
 }
 
 func (this *Request) GetMeta() interface{} {
-    return this.meta
+    return this.Meta
 }
