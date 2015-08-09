@@ -2,12 +2,10 @@ package scheduler
 
 import (
     "encoding/json"
-    "fmt"
     "github.com/garyburd/redigo/redis"
     "github.com/hu17889/go_spider/core/common/mlog"
     "github.com/hu17889/go_spider/core/common/request"
     "sync"
-    "time"
 )
 
 type RedisScheduler struct {
@@ -22,7 +20,7 @@ type RedisScheduler struct {
     queueMax              int
 }
 
-func NewRedisScheduler(addr string, maxConn, maxIdle int, forbiddenDuplicateUrl bool, queueMax int) *RedisScheduler {
+func NewRedisScheduler(addr string, maxConn, maxIdle int, forbiddenDuplicateUrl bool) *RedisScheduler {
     rs := &RedisScheduler{
         redisAddr:             addr,
         forbiddenDuplicateUrl: forbiddenDuplicateUrl,
@@ -30,7 +28,6 @@ func NewRedisScheduler(addr string, maxConn, maxIdle int, forbiddenDuplicateUrl 
         maxIdle:               maxIdle,
         requestList:           "go_spider_request",
         urlList:               "go_spider_url",
-        queueMax:              queueMax,
     }
     rs = rs.Init()
     return rs
@@ -47,12 +44,6 @@ func (this *RedisScheduler) newConn() (redis.Conn, error) {
     return redis.Dial("tcp", this.redisAddr)
 }
 func (this *RedisScheduler) Push(requ *request.Request) {
-    length, err := this.count()
-    if length >= this.queueMax {
-        time.Sleep(time.Second * 1)
-        fmt.Println("RedisScheduler Reach Queue Max Limit")
-    }
-
     this.locker.Lock()
     defer this.locker.Unlock()
 
@@ -104,24 +95,20 @@ func (this *RedisScheduler) Push(requ *request.Request) {
 func (this *RedisScheduler) Poll() *request.Request {
     this.locker.Lock()
     defer this.locker.Unlock()
-    fmt.Println("RedisScheduler Polling")
 
     conn := this.redisPool.Get()
     defer conn.Close()
 
-	
     length, err := this.count()
     if err != nil {
         return nil
     }
     if length <= 0 {
-        fmt.Println("RedisScheduler Poll length 0")
         mlog.LogInst().LogError("RedisScheduler Poll length 0")
         return nil
     }
     buf, err := conn.Do("LPOP", this.requestList)
     if err != nil {
-        fmt.Println("RedisScheduler Poll Error: " + err.Error())
         mlog.LogInst().LogError("RedisScheduler Poll Error: " + err.Error())
         return nil
     }
@@ -130,7 +117,6 @@ func (this *RedisScheduler) Poll() *request.Request {
 
     err = json.Unmarshal(buf.([]byte), requ)
     if err != nil {
-        fmt.Println("RedisScheduler Poll Error: " + err.Error())
         mlog.LogInst().LogError("RedisScheduler Poll Error: " + err.Error())
         return nil
     }
@@ -157,7 +143,6 @@ func (this *RedisScheduler) count() (int, error) {
     defer conn.Close()
     length, err := conn.Do("LLEN", this.requestList)
     if err != nil {
-        fmt.Println("RedisScheduler Poll Error: " + err.Error())
         mlog.LogInst().LogError("RedisScheduler Count Error: " + err.Error())
         return 0, err
     }
