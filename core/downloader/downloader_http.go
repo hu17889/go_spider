@@ -162,6 +162,33 @@ func (this *HttpDownloader) changeCharsetGoIconv(charset string, sor io.ReadClos
 }
 */
 
+func (this *HttpDownloader) readBody(sor io.ReadCloser, autoGzip bool) string {
+    var sorbody []byte
+    var err error
+    var r io.ReadCloser
+
+    if autoGzip {
+        gzipReader, err := gzip.NewReader(sor)
+        if err != nil {
+            mlog.LogInst().LogError(err.Error())
+            return ""
+        }
+        defer gzipReader.Close()
+        r = gzipReader
+    } else {
+        r = sor
+    }
+
+    if sorbody, err = ioutil.ReadAll(r); err != nil {
+        mlog.LogInst().LogError(err.Error())
+    }
+    //e,name,certain := charset.DetermineEncoding(sorbody,contentTypeStr)
+    bodystr := string(sorbody)
+
+    return bodystr
+}
+
+
 // Charset auto determine. Use golang.org/x/net/html/charset. Get page body and change it to utf-8
 func (this *HttpDownloader) changeCharsetEncodingAuto(contentTypeStr string, sor io.ReadCloser) string {
     var err error
@@ -299,11 +326,27 @@ func (this *HttpDownloader) downloadFile(p *page.Page, req *request.Request) (*p
 
     // get converter to utf-8
 	var bodyStr string
-	if resp.Header.Get("Content-Encoding") == "gzip" {
-		bodyStr = this.changeCharsetEncodingAutoGzipSupport(resp.Header.Get("Content-Type"), resp.Body)
-	} else {
-		bodyStr = this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
-	}
+
+    //if resp.Header.Get("Content-Encoding") == "gzip" {
+    //    bodyStr = this.changeCharsetEncodingAutoGzipSupport(resp.Header.Get("Content-Type"), resp.Body)
+    //} else {
+    //    bodyStr = this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
+    //}
+	//修改：根据请求设置关闭自动转码，版权归原作者所有
+	if req.CloseAutoIconv {
+        if resp.Header.Get("Content-Encoding") == "gzip" {
+            bodyStr = this.readBody(resp.Body,true)
+        } else {
+            bodyStr = this.readBody(resp.Body,false)
+        }
+    } else {
+        if resp.Header.Get("Content-Encoding") == "gzip" {
+            bodyStr = this.changeCharsetEncodingAutoGzipSupport(resp.Header.Get("Content-Type"), resp.Body)
+        } else {
+            bodyStr = this.changeCharsetEncodingAuto(resp.Header.Get("Content-Type"), resp.Body)
+        }
+    }
+
     //fmt.Printf("utf-8 body %v \r\n", bodyStr)
     defer resp.Body.Close()
     return p, bodyStr

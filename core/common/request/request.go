@@ -42,6 +42,9 @@ type Request struct {
     checkRedirect func(req *http.Request, via []*http.Request) error
 
     Meta interface{}
+
+    //修改：增加自动转码开关，遵循MPL协议，版权仍归原作者所有
+    CloseAutoIconv bool
 }
 
 // NewRequest returns initialized Request object.
@@ -56,14 +59,14 @@ func NewRequest(url string, respType string, urltag string, method string,
     postdata string, header http.Header, cookies []*http.Cookie,
     checkRedirect func(req *http.Request, via []*http.Request) error,
     meta interface{}) *Request {
-    return &Request{url, respType, method, postdata, urltag, header, cookies, "", checkRedirect, meta}
+    return &Request{Url:url, RespType:respType, Method:method, Postdata:postdata, Urltag:urltag, Header:header, Cookies:cookies, ProxyHost:"", checkRedirect:checkRedirect, Meta:meta}
 }
 
 func NewRequestWithProxy(url string, respType string, urltag string, method string,
     postdata string, header http.Header, cookies []*http.Cookie, proxyHost string,
     checkRedirect func(req *http.Request, via []*http.Request) error,
     meta interface{}) *Request {
-    return &Request{url, respType, method, postdata, urltag, header, cookies, proxyHost, checkRedirect, meta}
+    return &Request{Url:url, RespType:respType, Method:method, Postdata:postdata, Urltag:urltag, Header:header, Cookies:cookies, ProxyHost:proxyHost, checkRedirect:checkRedirect, Meta:meta}
 }
 
 func NewRequestWithHeaderFile(url string, respType string, headerFile string) *Request {
