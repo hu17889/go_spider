@@ -28,7 +28,7 @@ type Page struct {
     header  http.Header
     cookies []*http.Cookie
 
-    // The docParser is a pointer of goquery boject that contains html result.
+    // The docParser is a pointer of goquery object that contains html result.
     docParser *goquery.Document
 
     // The jsonMap is the json result.
